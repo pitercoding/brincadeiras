@@ -23,11 +23,12 @@ backend/logs/
 
 # Arquivo de ajuda local do Spring
 backend/HELP.md
+backend/application-secret.properties
 
 # Environment and config files
 backend/application-*.yml
 backend/application-*.properties
-!backend/application.properties  # mantém o principal se quiser
+!backend/application.properties
 
 # =========================
 # 💻 FRONTEND (React / Node / Vite)

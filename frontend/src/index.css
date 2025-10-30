@@ -1,0 +1,99 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  background-color: #f7f7f7;
+}
+
+/* HEADER */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fbb6ce;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.header h1 {
+  color: #d6336c;
+}
+
+.header nav a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: #d6336c;
+  font-weight: 500;
+}
+
+/* MAIN */
+.main-content {
+  position: relative;
+  padding-top: 80px;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* BACKGROUND */
+.background-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/brincadeiras-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+/* CONTEÚDO */
+.content {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+}
+
+/* GRID DE CARDS */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* CARD */
+.card-atividade {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #d6336c;
+}
+
+.card-desc {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.card-meta {
+  font-size: 0.9rem;
+  color: #666;
+}

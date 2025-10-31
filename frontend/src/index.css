@@ -1,4 +1,4 @@
-/* Reset básico */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -96,4 +96,68 @@ body {
 .card-meta {
   font-size: 0.9rem;
   color: #666;
+}
+
+/* FORMULÁRIO NOVA ATIVIDADE */
+.form-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.form-container h1 {
+  text-align: center;
+  color: #d6336c;
+  margin-bottom: 1.5rem;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container input,
+.form-container textarea {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-container input:focus,
+.form-container textarea:focus {
+  border-color: #d6336c;
+}
+
+.form-container textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-container button {
+  background-color: #d6336c;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form-container button:hover {
+  background-color: #b02a57;
+}
+
+.form-container .error {
+  color: red;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  text-align: center;
 }

@@ -1,32 +1,51 @@
-// src/pages/Home.jsx
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import api from "../services/api";
+
 function Home() {
-  const atividades = [
-    {
-      id: 1,
-      titulo: "Pintura com guache",
-      descricao: "Atividade de pintura livre para estimular a criatividade.",
-      materiais: ["Guache", "Papel", "Pincel"],
-      faixaEtaria: "3-6 anos",
-    },
-    {
-      id: 2,
-      titulo: "Massinha de modelar",
-      descricao: "Exploração sensorial e coordenação motora fina.",
-      materiais: ["Massinha", "Espátula"],
-      faixaEtaria: "2-5 anos",
-    },
-  ];
+  const [atividades, setAtividades] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    api.get("/atividades")
+      .then((res) => {
+        let dados = res.data;
+        if (location.state?.novaAtividade) {
+          dados = [location.state.novaAtividade, ...dados];
+        }
+        setAtividades(dados);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setErro("Não foi possível carregar as atividades 😢");
+        setLoading(false);
+      });
+  }, [location.state]);
+
+  if (loading) return <p>Carregando atividades...</p>;
+  if (erro) return <p>{erro}</p>;
 
   return (
     <div className="grid-container">
-      {atividades.map((a) => (
-        <div key={a.id} className="card-atividade">
-          <h2 className="card-title">{a.titulo}</h2>
-          <p className="card-desc">{a.descricao}</p>
-          <p className="card-meta">🎨 Materiais: {a.materiais.join(", ")}</p>
-          <p className="card-meta">👶 Faixa etária: {a.faixaEtaria}</p>
-        </div>
-      ))}
+      {atividades.length > 0 ? (
+        atividades.map((a) => (
+          <div key={a.id} className="card-atividade">
+            <h2 className="card-title">{a.titulo || a.nome}</h2>
+            <p className="card-desc">{a.descricao}</p>
+            {a.materiais && (
+              <p className="card-meta">🎨 Materiais: {a.materiais.join(", ")}</p>
+            )}
+            {a.faixaEtaria && (
+              <p className="card-meta">👶 Faixa etária: {a.faixaEtaria}</p>
+            )}
+          </div>
+        ))
+      ) : (
+        <p>Nenhuma atividade encontrada.</p>
+      )}
     </div>
   );
 }

@@ -7,7 +7,14 @@ function App() {
   return (
     <BrowserRouter>
       <header className="header">
-        <h1>🌸 Brincadeiras</h1>
+        <h1 className="header-logo">
+          <img 
+          src="/gis-de-cera.png" 
+          alt="Logo Brincadeiras" 
+          className="logo-img" 
+          />
+          Brincadeiras
+          </h1>
         <nav>
           <Link to="/">Início</Link>
           <Link to="/nova">Cadastrar</Link>

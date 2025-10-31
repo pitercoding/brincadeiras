@@ -37,6 +37,17 @@ body {
   font-weight: 500;
 }
 
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-img {
+  width: 32px;
+  height: 32px;
+}
+
 /* MAIN */
 .main-content {
   position: relative;

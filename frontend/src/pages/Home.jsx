@@ -1,25 +1,29 @@
-// src/pages/Home.jsx
 import { useEffect, useState } from "react";
-import api from "../services/api"; // importa o Axios configurado
+import { useLocation } from "react-router-dom";
+import api from "../services/api";
 
 function Home() {
   const [atividades, setAtividades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
-    // busca as atividades do backend ao carregar a página
     api.get("/atividades")
       .then((res) => {
-        setAtividades(res.data);
+        let dados = res.data;
+        if (location.state?.novaAtividade) {
+          dados = [location.state.novaAtividade, ...dados];
+        }
+        setAtividades(dados);
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Erro ao buscar atividades:", err);
+        console.error(err);
         setErro("Não foi possível carregar as atividades 😢");
         setLoading(false);
       });
-  }, []);
+  }, [location.state]);
 
   if (loading) return <p>Carregando atividades...</p>;
   if (erro) return <p>{erro}</p>;

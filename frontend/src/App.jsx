@@ -1,7 +1,7 @@
-// src/App.jsx
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./index.css";
 import Home from "./pages/Home";
+import NovaAtividade from "./pages/NovaAtividade";
 
 function App() {
   return (
@@ -16,12 +16,10 @@ function App() {
 
       <main className="main-content">
         <div className="background-layer"></div>
-
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
-            {/* Rota /nova vazia por enquanto */}
-            <Route path="/nova" element={<div>Nova Atividade</div>} />
+            <Route path="/nova" element={<NovaAtividade />} />
           </Routes>
         </div>
       </main>

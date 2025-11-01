@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import api from "../services/api";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [atividades, setAtividades] = useState([]);
@@ -32,16 +33,12 @@ function Home() {
     <div className="grid-container">
       {atividades.length > 0 ? (
         atividades.map((a) => (
-          <div key={a.id} className="card-atividade">
-            <h2 className="card-title">{a.titulo || a.nome}</h2>
+          <Link key={a.id} to={`/atividades/${a.id}`} className="card-atividade">
+            <h2 className="card-title">{a.titulo}</h2>
             <p className="card-desc">{a.descricao}</p>
-            {a.materiais && (
-              <p className="card-meta">🎨 Materiais: {a.materiais.join(", ")}</p>
-            )}
-            {a.faixaEtaria && (
-              <p className="card-meta">👶 Faixa etária: {a.faixaEtaria}</p>
-            )}
-          </div>
+            <p className="card-meta">🎨 Materiais: {a.materiais.join(", ")}</p>
+            <p className="card-meta">👶 Faixa etária: {a.faixaEtaria}</p>
+          </Link>
         ))
       ) : (
         <p>Nenhuma atividade encontrada.</p>

@@ -247,3 +247,73 @@ body {
 .btn-voltar:hover {
   background-color: #fda4b8;
 }
+
+/* FOOTER */
+.footer {
+  background-color: #ffeef4;
+  color: #8b1f3a;
+  padding: 1.5rem;
+  border-top: 2px solid #fbb6ce;
+  font-size: 0.95rem;
+  margin-top: auto;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between; /* separa as seções horizontalmente */
+  align-items: center;           /* centraliza verticalmente */
+  flex-wrap: wrap;               /* permite quebra em telas menores */
+  max-width: 800px;
+  margin: 0 auto 0.75rem auto;   /* centraliza e adiciona espaço inferior */
+  gap: 1rem;
+}
+
+.footer-project {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* espaço entre logo e nome */
+}
+
+.project-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #d6336c;
+}
+
+.footer-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.author {
+  font-size: 0.9rem;
+  color: #7a2438;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.footer-links a {
+  color: #8b1f3a;
+  font-size: 1.5rem;
+  transition: color 0.2s, transform 0.12s;
+}
+
+.footer-links a:hover {
+  transform: scale(1.2);
+  color: #a92a47;
+}
+
+/* Responsividade: empilha no mobile */
+@media (max-width: 600px) {
+  .footer-top {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

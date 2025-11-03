@@ -70,6 +70,48 @@ body {
   z-index: 0;
 }
 
+/* FILTROS */
+.filtro-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.filtro-input, .filtro-select {
+  padding: 0.5rem;
+  border: 1px solid #f3c1d8;
+  border-radius: 8px;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.filtro-btn {
+  background-color: #d6336c;
+  color: white;
+  border: none;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.filtro-btn:hover {
+  background-color: #a92a47;
+}
+
+.filtro-btn.limpar {
+  background-color: #f8d7da;
+  color: #a10d2f;
+  border: 1px solid #f5c2c7;
+}
+
+.filtro-btn.limpar:hover {
+  background-color: #f1b0b7;
+}
+
 /* CONTEÚDO */
 .content {
   position: relative;

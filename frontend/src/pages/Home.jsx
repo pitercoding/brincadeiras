@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; 
 import { useLocation, Link } from "react-router-dom";
 import api from "../services/api";
 import FiltroAtividades from "../components/FiltroAtividades";
+import { errorToast, infoToast, successToast } from "../utils/toast";
 
 function Home() {
   const [atividades, setAtividades] = useState([]);
   const [filtradas, setFiltradas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [erro, setErro] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -24,12 +24,11 @@ function Home() {
       })
       .catch((err) => {
         console.error(err);
-        setErro("Não foi possível carregar as atividades 😢");
+        errorToast("Não foi possível carregar as atividades 😢");
         setLoading(false);
       });
   }, [location.state]);
 
-  // 🔹 Função de filtragem com base em intervalos de idade
   const filtrarAtividades = ({ busca, faixaEtaria, material }) => {
     const resultado = atividades.filter((a) => {
       const tituloMatch = a.titulo
@@ -41,32 +40,45 @@ function Home() {
           )
         : true;
 
-      // Verifica faixa etária
       const faixaMatch = faixaEtaria
-      ? (() => {
-          const [min, max] = faixaEtaria.split("-").map(Number);
-          const [faixaMin, faixaMax] = a.faixaEtaria
-            .replace(" anos", "")
-            .split("-")
-            .map(Number);
-
-          // retorna true se houver intersecção entre as faixas
-          return faixaMax >= min && faixaMin <= max;
-        })()
-      : true;
+        ? (() => {
+            const [min, max] = faixaEtaria.split("-").map(Number);
+            const [faixaMin, faixaMax] = a.faixaEtaria
+              .replace(" anos", "")
+              .split("-")
+              .map(Number);
+            return faixaMax >= min && faixaMin <= max;
+          })()
+        : true;
 
       return tituloMatch && materialMatch && faixaMatch;
     });
 
     setFiltradas(resultado);
+
+    if (resultado.length === 0) {
+      infoToast("Nenhuma atividade encontrada com esses filtros.");
+    }
   };
 
   const limparFiltros = () => {
     setFiltradas(atividades);
   };
 
+  // 🗑️ Placeholder: função para deletar (quando implementar o botão)
+  // const deletarAtividade = async (id) => {
+  //   try {
+  //     await api.delete(`/atividades/${id}`);
+  //     setAtividades(prev => prev.filter(a => a.id !== id));
+  //     setFiltradas(prev => prev.filter(a => a.id !== id));
+  //     successToast("Atividade removida com sucesso!");
+  //   } catch (err) {
+  //     console.error(err);
+  //     errorToast("Erro ao excluir a atividade 😢");
+  //   }
+  // };
+
   if (loading) return <p>Carregando atividades...</p>;
-  if (erro) return <p>{erro}</p>;
 
   return (
     <div>
@@ -74,6 +86,7 @@ function Home() {
         onFiltrar={filtrarAtividades}
         onLimpar={limparFiltros}
       />
+
       <div className="grid-container">
         {filtradas.length > 0 ? (
           filtradas.map((a) => (
@@ -88,6 +101,11 @@ function Home() {
                 🎨 Materiais: {a.materiais.join(", ")}
               </p>
               <p className="card-meta">👶 Faixa etária: {a.faixaEtaria}</p>
+
+              {/* 🗑️ Exemplo de botão para deletar no futuro */}
+              {/* <button onClick={() => deletarAtividade(a.id)} className="btn-excluir">
+                Excluir
+              </button> */}
             </Link>
           ))
         ) : (

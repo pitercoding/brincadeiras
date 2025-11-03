@@ -1,14 +1,13 @@
-// src/pages/DetalheAtividade.jsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { errorToast, infoToast, successToast } from "../utils/toast";
 
 function DetalheAtividade() {
-  const { id } = useParams(); // pega o ID da URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const [atividade, setAtividade] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [erro, setErro] = useState(null);
 
   useEffect(() => {
     api.get(`/atividades/${id}`)
@@ -18,14 +17,41 @@ function DetalheAtividade() {
       })
       .catch((err) => {
         console.error("Erro ao buscar atividade:", err);
-        setErro("Não foi possível carregar a atividade 😢");
+        errorToast("Não foi possível carregar a atividade 😢");
         setLoading(false);
       });
   }, [id]);
 
+  // 🖊️ Placeholder: função para editar (PUT)
+  // const editarAtividade = async (dadosAtualizados) => {
+  //   try {
+  //     const res = await api.put(`/atividades/${id}`, dadosAtualizados);
+  //     setAtividade(res.data);
+  //     successToast("Atividade atualizada com sucesso!");
+  //   } catch (err) {
+  //     console.error(err);
+  //     errorToast("Erro ao atualizar a atividade 😢");
+  //   }
+  // };
+
+  // 🗑️ Placeholder: função para deletar (DELETE)
+  // const deletarAtividade = async () => {
+  //   if (!window.confirm("Deseja realmente excluir esta atividade?")) return;
+  //   try {
+  //     await api.delete(`/atividades/${id}`);
+  //     successToast("Atividade excluída com sucesso!");
+  //     navigate("/");
+  //   } catch (err) {
+  //     console.error(err);
+  //     errorToast("Erro ao excluir a atividade 😢");
+  //   }
+  // };
+
   if (loading) return <p>Carregando detalhes...</p>;
-  if (erro) return <p>{erro}</p>;
-  if (!atividade) return <p>Atividade não encontrada.</p>;
+  if (!atividade) {
+    infoToast("Atividade não encontrada.");
+    return <p>Atividade não encontrada.</p>;
+  }
 
   return (
     <div className="detalhe-container">
@@ -33,7 +59,7 @@ function DetalheAtividade() {
         <h2 className="detalhe-titulo">{atividade.titulo}</h2>
         <p className="detalhe-desc">{atividade.descricao}</p>
 
-        {atividade.materiais && atividade.materiais.length > 0 && (
+        {atividade.materiais?.length > 0 && (
           <div className="detalhe-materiais">
             <h4>🧺 Materiais necessários:</h4>
             <ul>
@@ -45,12 +71,26 @@ function DetalheAtividade() {
         )}
 
         {atividade.faixaEtaria && (
-          <p className="detalhe-faixa">👶 Faixa etária: {atividade.faixaEtaria}</p>
+          <p className="detalhe-faixa">
+            👶 Faixa etária: {atividade.faixaEtaria}
+          </p>
         )}
 
-        <button className="btn-voltar" onClick={() => navigate(-1)}>
-          ⬅️ Voltar
-        </button>
+        <div className="detalhe-botoes">
+          <button className="btn-voltar" onClick={() => navigate(-1)}>
+            ⬅️ Voltar
+          </button>
+
+          {/* 🖊️ Botão futuro para editar */}
+          {/* <button className="btn-editar" onClick={() => editarAtividade({...})}>
+            Editar
+          </button> */}
+
+          {/* 🗑️ Botão futuro para excluir */}
+          {/* <button className="btn-excluir" onClick={deletarAtividade}>
+            Excluir
+          </button> */}
+        </div>
       </div>
     </div>
   );

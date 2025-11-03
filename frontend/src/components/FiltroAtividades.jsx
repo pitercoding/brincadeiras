@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { infoToast } from "../utils/toast";
 
 function FiltroAtividades({ onFiltrar, onLimpar }) {
   const [busca, setBusca] = useState("");
   const [faixaEtaria, setFaixaEtaria] = useState("");
   const [material, setMaterial] = useState("");
 
-  // Envia filtros ao pressionar Enter na busca
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       aplicarFiltros();
@@ -13,6 +13,9 @@ function FiltroAtividades({ onFiltrar, onLimpar }) {
   };
 
   const aplicarFiltros = () => {
+    if (!busca && !faixaEtaria && !material) {
+      infoToast("Adicione pelo menos um filtro para pesquisar 😉");
+    }
     onFiltrar({ busca, faixaEtaria, material });
   };
 

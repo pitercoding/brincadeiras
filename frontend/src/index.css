@@ -1,4 +1,4 @@
-/* RESET */
+/* ========== RESET ========== */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +12,7 @@ body {
   background-color: #f7f7f7;
 }
 
-/* HEADER */
+/* ========== HEADER ========== */
 .header {
   position: fixed;
   top: 0;
@@ -24,6 +24,7 @@ body {
   justify-content: space-between;
   align-items: center;
   z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .header h1 {
@@ -48,7 +49,7 @@ body {
   height: 32px;
 }
 
-/* MAIN */
+/* ========== MAIN ========== */
 .main-content {
   position: relative;
   padding-top: 80px;
@@ -56,7 +57,7 @@ body {
   overflow: hidden;
 }
 
-/* BACKGROUND */
+/* ========== BACKGROUND ========== */
 .background-layer {
   position: absolute;
   top: 0;
@@ -68,6 +69,48 @@ body {
   background-position: center;
   opacity: 0.3;
   z-index: 0;
+}
+
+/* ========== FILTROS ========== */
+.filtro-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.filtro-input, .filtro-select {
+  padding: 0.5rem;
+  border: 1px solid #f3c1d8;
+  border-radius: 8px;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.filtro-btn {
+  background-color: #d6336c;
+  color: white;
+  border: none;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.filtro-btn:hover {
+  background-color: #a92a47;
+}
+
+.filtro-btn.limpar {
+  background-color: #f8d7da;
+  color: #a10d2f;
+  border: 1px solid #f5c2c7;
+}
+
+.filtro-btn.limpar:hover {
+  background-color: #f1b0b7;
 }
 
 /* CONTEÚDO */
@@ -124,7 +167,7 @@ body {
   color: #666;
 }
 
-/* FORMULÁRIO NOVA ATIVIDADE */
+/* ========== FORMULÁRIO NOVA ATIVIDADE ========== */
 .form-container {
   max-width: 500px;
   margin: 2rem auto;
@@ -188,7 +231,7 @@ body {
   text-align: center;
 }
 
-/* DETALHE DA ATIVIDADE */
+/* ========== DETALHE DA ATIVIDADE ========== */
 .detalhe-container {
   display: flex;
   justify-content: center;
@@ -234,21 +277,181 @@ body {
   margin-bottom: 1rem;
 }
 
-.btn-voltar {
-  background-color: #fbb6ce;
-  color: #d6336c;
+/* FORMULÁRIO DE EDIÇÃO */
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  background-color: #fafafa;
+  transition: all 0.2s ease;
+  font-family: "Inter", sans-serif;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #ffb703;
+  background-color: #fffdf5;
+  box-shadow: 0 0 0 3px rgba(255, 183, 3, 0.2);
+}
+
+.form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* BOTÕES */
+
+.detalhe-botoes {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.btn-editar,
+.btn-voltar,
+.btn-excluir {
+  padding: 0.6rem 1.2rem;
   border: none;
-  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "Inter", sans-serif;
+}
+
+.btn-editar {
+  background-color: #2196f3;
+  color: white;
+}
+.btn-editar:hover {
+  background-color: #1976d2;
+}
+
+.btn-voltar {
+  background-color: #f1f1f1;
+  color: #444;
+}
+.btn-voltar:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-excluir {
+  background-color: #ef4444;
+  color: white;
+}
+.btn-excluir:hover {
+  background-color: #dc2626;
+}
+
+/* CONTAINER DO FORM */
+
+.detalhe-card {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.detalhe-titulo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.detalhe-desc {
+  color: #555;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* MODAL DE CONFIRMAÇÃO */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+.modal p {
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 1.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-confirm {
+  background-color: #d6336c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: background 0.3s;
+  font-weight: 600;
+  transition: background-color 0.2s;
 }
 
-.btn-voltar:hover {
-  background-color: #fda4b8;
+.btn-confirm:hover {
+  background-color: #b02954;
 }
 
-/* FOOTER */
+.btn-cancel {
+  background-color: #f8d7da;
+  color: #a10d2f;
+  border: 1px solid #f5c2c7;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+  background-color: #f1b0b7;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ========== FOOTER ========== */
 .footer {
   background-color: #ffeef4;
   color: #8b1f3a;
@@ -260,18 +463,18 @@ body {
 
 .footer-top {
   display: flex;
-  justify-content: space-between; /* separa as seções horizontalmente */
-  align-items: center;           /* centraliza verticalmente */
-  flex-wrap: wrap;               /* permite quebra em telas menores */
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   max-width: 800px;
-  margin: 0 auto 0.75rem auto;   /* centraliza e adiciona espaço inferior */
+  margin: 0 auto 0.75rem auto;
   gap: 1rem;
 }
 
 .footer-project {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* espaço entre logo e nome */
+  gap: 0.5rem;
 }
 
 .project-name {
@@ -310,7 +513,7 @@ body {
   color: #a92a47;
 }
 
-/* Responsividade: empilha no mobile */
+/* ========== RESPONSIVIDADE ========== */
 @media (max-width: 600px) {
   .footer-top {
     flex-direction: column;

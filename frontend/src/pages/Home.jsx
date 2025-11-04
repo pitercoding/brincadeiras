@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import api from "../services/api";
 import FiltroAtividades from "../components/FiltroAtividades";
-import { errorToast, infoToast, successToast } from "../utils/toast";
+import { errorToast, infoToast } from "../utils/toast";
 
 function Home() {
   const [atividades, setAtividades] = useState([]);
@@ -65,19 +65,6 @@ function Home() {
     setFiltradas(atividades);
   };
 
-  // 🗑️ Placeholder: função para deletar (quando implementar o botão)
-  // const deletarAtividade = async (id) => {
-  //   try {
-  //     await api.delete(`/atividades/${id}`);
-  //     setAtividades(prev => prev.filter(a => a.id !== id));
-  //     setFiltradas(prev => prev.filter(a => a.id !== id));
-  //     successToast("Atividade removida com sucesso!");
-  //   } catch (err) {
-  //     console.error(err);
-  //     errorToast("Erro ao excluir a atividade 😢");
-  //   }
-  // };
-
   if (loading) return <p>Carregando atividades...</p>;
 
   return (
@@ -101,11 +88,6 @@ function Home() {
                 🎨 Materiais: {a.materiais.join(", ")}
               </p>
               <p className="card-meta">👶 Faixa etária: {a.faixaEtaria}</p>
-
-              {/* 🗑️ Exemplo de botão para deletar no futuro */}
-              {/* <button onClick={() => deletarAtividade(a.id)} className="btn-excluir">
-                Excluir
-              </button> */}
             </Link>
           ))
         ) : (

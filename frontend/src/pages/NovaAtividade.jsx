@@ -8,78 +8,105 @@ function NovaAtividade() {
   const [descricao, setDescricao] = useState("");
   const [materiais, setMateriais] = useState("");
   const [faixaEtaria, setFaixaEtaria] = useState("");
-  const [erro, setErro] = useState(null);
-  const [loading, setLoading] = useState(false); // indica carregamento (react-toastify)
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
+  // Validação
+  const validarCampos = () => {
+    if (!titulo.trim()) {
+      toast.error("Por favor, informe um título 📝");
+      return false;
+    }
+    if (!descricao.trim()) {
+      toast.error("A descrição não pode estar vazia 💡");
+      return false;
+    }
+    if (!materiais.trim()) {
+      toast.error("Adicione pelo menos um material 🎨");
+      return false;
+    }
+    if (!faixaEtaria.trim()) {
+      toast.error("Informe a faixa etária 🧒");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // inicia carregamento (react-toastify)
-    setErro(null);
+    if (!validarCampos()) return;
+
+    setLoading(true);
 
     try {
       const res = await api.post("/atividades", {
-        titulo,
-        descricao,
+        titulo: titulo.trim(),
+        descricao: descricao.trim(),
         materiais: materiais.split(",").map((m) => m.trim()),
-        faixaEtaria,
+        faixaEtaria: faixaEtaria.trim(),
       });
 
-      // nova atividade: mostra toast de sucesso
       toast.success("Atividade criada com sucesso!");
-
-      // limpa campos
       setTitulo("");
       setDescricao("");
       setMateriais("");
       setFaixaEtaria("");
 
-      // redireciona para Home
       navigate("/", { state: { novaAtividade: res.data } });
     } catch (err) {
       console.error(err);
-      setErro("Não foi possível criar a atividade.");
-
-      // novo: toast de erro
       toast.error("Erro ao criar a atividade. Tente novamente.");
     } finally {
-      setLoading(false); // finaliza o estado de carregamento(react-toastify)
+      setLoading(false);
     }
   };
 
   return (
-    <div className="form-container">
-      <h1>Nova Atividade</h1>
-      {erro && <p className="error">{erro}</p>}
-      <form onSubmit={handleSubmit}>
+    <div className="form-container max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md mt-8">
+      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
+        Nova Atividade
+      </h1>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           placeholder="Título"
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
-          required
+          className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+
         <textarea
           placeholder="Descrição"
           value={descricao}
           onChange={(e) => setDescricao(e.target.value)}
-          required
+          rows={4}
+          className="p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+
         <input
           placeholder="Materiais (separados por vírgula)"
           value={materiais}
           onChange={(e) => setMateriais(e.target.value)}
-          required
+          className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+
         <input
           placeholder="Faixa etária"
           value={faixaEtaria}
           onChange={(e) => setFaixaEtaria(e.target.value)}
-          required
+          className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        {/* botão mostra carregamento visual */}
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          className={`p-3 text-white rounded-lg transition-all duration-200 ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
+        >
           {loading ? "Salvando..." : "Criar Atividade"}
         </button>
       </form>

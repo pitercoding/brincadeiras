@@ -13,7 +13,8 @@ function DetalheAtividade() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
-    api.get(`/atividades/${id}`)
+    api
+      .get(`/atividades/${id}`)
       .then((res) => {
         setAtividade(res.data);
         setForm(res.data);
@@ -32,11 +33,36 @@ function DetalheAtividade() {
   };
 
   const salvarEdicao = async () => {
+    // Validação dos campos obrigatórios
+    if (!form.titulo?.trim()) {
+      errorToast("O título não pode estar vazio 📝");
+      return;
+    }
+
+    if (!form.descricao?.trim()) {
+      errorToast("A descrição é obrigatória 💡");
+      return;
+    }
+
+    if (!form.faixaEtaria?.trim()) {
+      errorToast("Informe a faixa etária 🧒");
+      return;
+    }
+
+    if (
+      !Array.isArray(form.materiais) ||
+      form.materiais.length === 0 ||
+      !form.materiais[0].trim()
+    ) {
+      errorToast("Adicione ao menos um material 🎨");
+      return;
+    }
+
     try {
       const res = await api.put(`/atividades/${id}`, form);
       setAtividade(res.data);
       setEditando(false);
-      successToast("Atividade atualizada com sucesso!");
+      successToast("Atividade atualizada com sucesso! 🎉");
     } catch (err) {
       console.error(err);
       errorToast("Erro ao atualizar a atividade 😢");

@@ -1,12 +1,25 @@
 function CardAtividade({ atividade }) {
   return (
     <div className="card-atividade">
-      <h2 className="card-title">{atividade.titulo}</h2>
+      <div className="card-header">
+        <h2 className="card-title">{atividade.titulo}</h2>
+      </div>
+
       <p className="card-desc">{atividade.descricao}</p>
-      <p className="card-meta">🎨 Materiais: {atividade.materiais.join(", ")}</p>
-      <p className="card-meta">👶 Faixa etária: {atividade.faixaEtaria}</p>
+
+      <div className="card-info">
+        <p className="card-meta">
+          <span className="icon">🎨</span>
+          {atividade.materiais.join(", ")}
+        </p>
+        <p className="card-meta">
+          <span className="icon">👶</span>
+          {atividade.faixaEtaria}
+        </p>
+      </div>
     </div>
   );
 }
 
 export default CardAtividade;
+

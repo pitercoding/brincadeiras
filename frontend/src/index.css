@@ -120,51 +120,73 @@ body {
   padding: 2rem;
 }
 
-/* GRID DE CARDS */
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-}
-
-/* CARD */
+/* ======== CARDS ATIVIDADES ======== */
 .card-atividade {
   text-decoration: none;
   color: inherit;
-  background-color: #fff;
+  background: #fff;
   border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 1.25rem 1rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #f3c1d8;
 }
 
 .card-atividade:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
 }
 
 .card-title {
-  text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 700;
   color: #d6336c;
-  transition: color 0.3s;
-}
-
-.card-atividade:hover .card-title {
-  color: #d6336c;
-  text-decoration: underline;
+  margin: 0;
 }
 
 .card-desc {
-  color: #333;
-  margin-bottom: 0.5rem;
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .card-meta {
   font-size: 0.9rem;
-  color: #666;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.icon {
+  font-size: 1rem;
+}
+
+/* ======== GRID DE CARDS ======== */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* ========== FORMULÁRIO NOVA ATIVIDADE ========== */
@@ -513,10 +535,61 @@ body {
   color: #a92a47;
 }
 
-/* ========== RESPONSIVIDADE ========== */
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .card-atividade {
+    padding: 1rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+}
+
 @media (max-width: 600px) {
+
+  .main-content {
+    padding: 80px 1rem 2rem 1rem;
+  }
+
+  .filtro-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtro-input,
+  .filtro-select,
+  .filtro-btn {
+    width: 100%;
+  }
+
   .footer-top {
     flex-direction: column;
     gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .card-atividade {
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+
+  .card-desc {
+    font-size: 0.9rem;
+  }
+
+  .card-meta {
+    font-size: 0.85rem;
   }
 }

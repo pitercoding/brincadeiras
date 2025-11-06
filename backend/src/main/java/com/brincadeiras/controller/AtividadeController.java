@@ -2,6 +2,7 @@ package com.brincadeiras.controller;
 
 import com.brincadeiras.model.Atividade;
 import com.brincadeiras.service.AtividadeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,10 @@ public class AtividadeController {
 
     private final AtividadeService atividadeService;
 
-    @PostMapping()
-    public Atividade postAtividade(@RequestBody Atividade atividade){
-        return atividadeService.postAtividade(atividade);
+    @PostMapping
+    public ResponseEntity<Atividade> postAtividade(@RequestBody @Valid Atividade atividade) {
+        Atividade criada = atividadeService.postAtividade(atividade);
+        return ResponseEntity.status(201).body(criada);
     }
 
     @GetMapping()
@@ -46,17 +48,7 @@ public class AtividadeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Atividade> updateAtividade(@PathVariable String id,
-                                                     @RequestBody Atividade atividade) {
-        Atividade existingAtividade = atividadeService.getAtividadeById(id);
-        if (existingAtividade == null) {
-            return ResponseEntity.notFound().build();
-        }
-        existingAtividade.setTitulo(atividade.getTitulo());
-        existingAtividade.setDescricao(atividade.getDescricao());
-        existingAtividade.setMateriais(atividade.getMateriais());
-        existingAtividade.setFaixaEtaria(atividade.getFaixaEtaria());
-
-        Atividade updated = atividadeService.updateAtividade(existingAtividade);
-        return ResponseEntity.ok(updated);
+                                                     @RequestBody @Valid Atividade atividade) {
+        return ResponseEntity.ok(atividadeService.updateAtividade(id, atividade));
     }
 }

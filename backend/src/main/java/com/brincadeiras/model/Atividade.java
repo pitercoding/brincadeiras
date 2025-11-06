@@ -2,8 +2,11 @@ package com.brincadeiras.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.List;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Document(collection = "atividades")
 public class Atividade {
@@ -11,12 +14,18 @@ public class Atividade {
     @Id
     private String id;
 
+    @NotBlank
+    @Size(min = 3, max = 100)
     private String titulo;
 
+    @NotBlank
+    @Size(min = 10, max = 500)
     private String descricao;
 
+    @NotEmpty
     private List<String> materiais;
 
+    @Pattern(regexp = "\\d-\\d anos", message = "Formato deve ser 'X-Y anos'")
     private String faixaEtaria;
 
     public Atividade() {

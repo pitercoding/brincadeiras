@@ -1,5 +1,6 @@
 package com.brincadeiras.controller;
 
+import com.brincadeiras.dto.GerarAtividadeRequest;
 import com.brincadeiras.model.Atividade;
 import com.brincadeiras.service.AtividadeService;
 import jakarta.validation.Valid;
@@ -66,5 +67,14 @@ public class AtividadeController {
         Atividade atualizada = atividadeService.updateAtividade(id, atividade);
         log.info("Atividade com id {} atualizada com sucesso", id);
         return ResponseEntity.ok(atualizada);
+    }
+
+    @PostMapping("/gerar")
+    public ResponseEntity<Atividade> gerarAtividadeComIA(@RequestBody @Valid GerarAtividadeRequest request) {
+        log.info("Recebendo requisição para gerar atividade com IA: faixaEtaria={}, tipo={}, materiais={}",
+                request.getFaixaEtaria(), request.getTipo(), request.getMateriais());
+        Atividade gerada = atividadeService.gerarComIA(request);
+        log.info("Atividade gerada com sucesso: {}", gerada.getTitulo());
+        return ResponseEntity.status(201).body(gerada);
     }
 }

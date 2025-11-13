@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 import java.util.Map;
@@ -23,16 +24,27 @@ public class AtividadeService {
 
     private final AtividadeRepository atividadeRepository;
 
-    // Modelo público da Hugging Face
-    private static final String HUGGINGFACE_MODEL_URL =
-            "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
-
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl(HUGGINGFACE_MODEL_URL)
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .build();
+    @Value("${huggingface.api.key}")
+    private String huggingFaceApiKey;
 
     private final ObjectMapper mapper = new ObjectMapper();
+
+    // Lista de modelos gratuitos para tentar
+    private static final String[] MODELOS = {
+            "https://api-inference.huggingface.co/models/gpt2",
+            "https://api-inference.huggingface.co/models/distilgpt2",
+            "https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-125M",
+            "https://api-inference.huggingface.co/models/facebook/opt-125m"
+    };
+
+    private WebClient buildClient(String baseUrl) {
+        return WebClient.builder()
+                .baseUrl(baseUrl)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+    }
+
+    // ========== CRUD ==========
 
     public Atividade postAtividade(Atividade atividade) {
         log.info("Salvando nova atividade: {}", atividade.getTitulo());
@@ -96,9 +108,10 @@ public class AtividadeService {
         }
     }
 
-    // IA — Gerar atividade criativa com Hugging Face
+    // ========== IA — Geração com Hugging Face ==========
+
     public Atividade gerarComIA(GerarAtividadeRequest request) {
-        log.info("Gerando nova atividade com IA (Hugging Face). Parâmetros: faixaEtaria={}, tipo={}, materiais={}",
+        log.info("Gerando nova atividade com IA. Parâmetros: faixaEtaria={}, tipo={}, materiais={}",
                 request.getFaixaEtaria(), request.getTipo(), request.getMateriais());
 
         String prompt = String.format(
@@ -111,35 +124,44 @@ public class AtividadeService {
                 String.join(", ", request.getMateriais())
         );
 
-        try {
-            WebClient.RequestBodySpec requestSpec = webClient.post()
-                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-
-            Map<String, Object> response = requestSpec
-                    .bodyValue(Map.of("inputs", prompt))
-                    .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
-                    .block();
-
-            log.info("Resposta bruta da IA: {}", response);
-
-            String content;
-            if (response.containsKey("generated_text")) {
-                content = (String) response.get("generated_text");
-            } else if (response instanceof List<?> list && !list.isEmpty()) {
-                Object item = ((Map<?, ?>) list.get(0)).get("generated_text");
-                content = item != null ? item.toString() : "";
-            } else {
-                throw new RuntimeException("Resposta inválida da IA");
+        for (String modelUrl : MODELOS) {
+            try {
+                Atividade atividade = gerarComModelo(modelUrl, prompt);
+                if (atividade != null) {
+                    log.info("Atividade gerada com sucesso pelo modelo: {}", modelUrl);
+                    return atividade;
+                }
+                log.warn("Modelo {} falhou, tentando próximo...", modelUrl);
+            } catch (Exception e) {
+                log.error("Erro no modelo {}: {}", modelUrl, e.getMessage());
             }
+        }
 
-            Atividade atividadeGerada = mapper.readValue(content, Atividade.class);
-            log.info("Atividade gerada com sucesso: {}", atividadeGerada.getTitulo());
-            return atividadeGerada;
+        throw new RuntimeException("Falha ao gerar atividade com IA (todos os modelos falharam).");
+    }
 
+    private Atividade gerarComModelo(String modelUrl, String prompt) {
+        WebClient client = buildClient(modelUrl);
+
+        List<Map<String, Object>> response = client.post()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + huggingFaceApiKey)
+                .bodyValue(Map.of("inputs", prompt))
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .block();
+
+        if (response == null || response.isEmpty() || !response.get(0).containsKey("generated_text")) {
+            log.warn("Resposta inválida ou vazia recebida do modelo: {}", modelUrl);
+            return null;
+        }
+
+        try {
+            String content = (String) response.get(0).get("generated_text");
+            log.debug("Texto bruto gerado: {}", content);
+            return mapper.readValue(content, Atividade.class);
         } catch (Exception e) {
-            log.error("Erro ao gerar atividade com IA: {}", e.getMessage());
-            throw new RuntimeException("Falha ao gerar atividade com IA", e);
+            log.error("Erro ao processar JSON do modelo {}: {}", modelUrl, e.getMessage());
+            return null;
         }
     }
 }

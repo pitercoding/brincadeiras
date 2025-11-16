@@ -1,31 +1,18 @@
 package com.brincadeiras.dto;
 
-import java.util.List;
+import jakarta.validation.constraints.NotBlank;
 
 public class GerarAtividadeRequest {
+
+    @NotBlank(message = "Faixa etária é obrigatória")
     private String faixaEtaria;
-    private List<String> materiais;
-    private String tipo; // opcional (ex: artes, sensorial)
+
+    private String descricaoUsuario;
 
     // Getters e Setters
-    public String getFaixaEtaria() {
-        return faixaEtaria;
-    }
-    public void setFaixaEtaria(String faixaEtaria) {
-        this.faixaEtaria = faixaEtaria;
-    }
+    public String getFaixaEtaria() { return faixaEtaria; }
+    public void setFaixaEtaria(String faixaEtaria) { this.faixaEtaria = faixaEtaria; }
 
-    public List<String> getMateriais() {
-        return materiais;
-    }
-    public void setMateriais(List<String> materiais) {
-        this.materiais = materiais;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+    public String getDescricaoUsuario() { return descricaoUsuario; }
+    public void setDescricaoUsuario(String descricaoUsuario) { this.descricaoUsuario = descricaoUsuario; }
 }

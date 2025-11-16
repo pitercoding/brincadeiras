@@ -1,21 +1,24 @@
 package com.brincadeiras.service;
 
+import com.brincadeiras.dto.GerarAtividadeRequest;
 import com.brincadeiras.model.Atividade;
 import com.brincadeiras.repository.AtividadeRepository;
-import com.brincadeiras.dto.GerarAtividadeRequest;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -27,25 +30,10 @@ public class AtividadeService {
     @Value("${huggingface.api.key}")
     private String huggingFaceApiKey;
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    @Value("${huggingface.model.url}")
+    private String huggingFaceModelUrl;
 
-    // Lista de modelos gratuitos para tentar
-    private static final String[] MODELOS = {
-            "https://api-inference.huggingface.co/models/gpt2",
-            "https://api-inference.huggingface.co/models/distilgpt2",
-            "https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-125M",
-            "https://api-inference.huggingface.co/models/facebook/opt-125m"
-    };
-
-    private WebClient buildClient(String baseUrl) {
-        return WebClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-    }
-
-    // ========== CRUD ==========
-
+    // ========================= CRUD ========================= //
     public Atividade postAtividade(Atividade atividade) {
         log.info("Salvando nova atividade: {}", atividade.getTitulo());
         try {
@@ -60,18 +48,13 @@ public class AtividadeService {
 
     public List<Atividade> getAllAtividades() {
         log.info("Buscando todas as atividades no banco de dados");
-        List<Atividade> atividades = atividadeRepository.findAll();
-        log.info("Total de atividades encontradas: {}", atividades.size());
-        return atividades;
+        return atividadeRepository.findAll();
     }
 
     public Atividade getAtividadeById(String id) {
         log.info("Buscando atividade com id: {}", id);
         return atividadeRepository.findById(id)
-                .map(atividade -> {
-                    log.info("Atividade encontrada: {}", atividade.getTitulo());
-                    return atividade;
-                })
+                .map(a -> { log.info("Atividade encontrada: {}", a.getTitulo()); return a; })
                 .orElseThrow(() -> {
                     log.warn("Atividade com id {} não encontrada", id);
                     return new NoSuchElementException("Atividade não encontrada");
@@ -82,9 +65,9 @@ public class AtividadeService {
         log.info("Deletando atividade com id: {}", id);
         try {
             atividadeRepository.deleteById(id);
-            log.info("Atividade deletada com sucesso. ID: {}", id);
+            log.info("Atividade deletada com sucesso.");
         } catch (Exception e) {
-            log.error("Erro ao deletar atividade com id {}: {}", id, e.getMessage());
+            log.error("Erro ao deletar atividade: {}", e.getMessage());
             throw e;
         }
     }
@@ -97,71 +80,108 @@ public class AtividadeService {
         existente.setDescricao(novaAtividade.getDescricao());
         existente.setMateriais(novaAtividade.getMateriais());
         existente.setFaixaEtaria(novaAtividade.getFaixaEtaria());
+        existente.setTipo(novaAtividade.getTipo());
 
         try {
-            Atividade atualizada = atividadeRepository.save(existente);
-            log.info("Atividade atualizada com sucesso. ID: {}", id);
-            return atualizada;
+            return atividadeRepository.save(existente);
         } catch (Exception e) {
-            log.error("Erro ao atualizar atividade com id {}: {}", id, e.getMessage());
+            log.error("Erro ao atualizar atividade: {}", e.getMessage());
             throw e;
         }
     }
 
-    // ========== IA — Geração com Hugging Face ==========
+    // ========================= IA — GERAÇÃO DE TEXTO ========================= //
+    public String gerarTextoComIA(GerarAtividadeRequest request) {
+        log.info("Gerando texto de atividade com IA — HF na URL: {}", huggingFaceModelUrl);
 
-    public Atividade gerarComIA(GerarAtividadeRequest request) {
-        log.info("Gerando nova atividade com IA. Parâmetros: faixaEtaria={}, tipo={}, materiais={}",
-                request.getFaixaEtaria(), request.getTipo(), request.getMateriais());
-
-        String prompt = String.format(
-                "Crie uma brincadeira infantil original, divertida e segura para crianças de %s anos. " +
-                        "Tipo de atividade: %s. Materiais disponíveis: %s. " +
-                        "Responda SOMENTE em JSON com este formato: " +
-                        "{\"titulo\":\"...\", \"descricao\":\"...\", \"materiais\":[\"...\"], \"faixaEtaria\":\"...\"}",
-                request.getFaixaEtaria(),
-                request.getTipo() != null ? request.getTipo() : "geral",
-                String.join(", ", request.getMateriais())
+        String promptBase = String.format(
+                "Você é um especialista em atividades infantis. Crie uma única brincadeira infantil divertida, simples e segura para crianças de %s anos. ",
+                request.getFaixaEtaria()
         );
 
-        for (String modelUrl : MODELOS) {
-            try {
-                Atividade atividade = gerarComModelo(modelUrl, prompt);
-                if (atividade != null) {
-                    log.info("Atividade gerada com sucesso pelo modelo: {}", modelUrl);
-                    return atividade;
-                }
-                log.warn("Modelo {} falhou, tentando próximo...", modelUrl);
-            } catch (Exception e) {
-                log.error("Erro no modelo {}: {}", modelUrl, e.getMessage());
-            }
+        String userExtra = (request.getDescricaoUsuario() != null && !request.getDescricaoUsuario().isBlank())
+                ? "Restrição: " + request.getDescricaoUsuario().trim() + ". "
+                : "Seja criativo e use materiais comuns encontrados em casa. ";
+
+        String prompt = promptBase + userExtra +
+                "Estrutura da Resposta: Título, Materiais Necessários e Instruções Simples. Responda apenas com o texto da atividade.";
+
+        WebClient client = WebClient.builder()
+                .baseUrl(huggingFaceModelUrl)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + huggingFaceApiKey)
+                .build();
+
+        Map<String, Object> params = Map.of(
+                "max_new_tokens", 250,
+                "temperature", 0.8,
+                "do_sample", true
+        );
+
+        Map<String, Object> requestBody = Map.of(
+                "inputs", prompt,
+                "parameters", params,
+                "options", Map.of("wait_for_model", true)
+        );
+
+        List<Map<String, Object>> responseList;
+        try {
+            responseList = client.post()
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                    .block();
+        } catch (Exception e) {
+            log.error("Erro ao chamar a API da Hugging Face: {}", e.getMessage());
+            return "Erro ao gerar atividade com IA.";
         }
 
-        throw new RuntimeException("Falha ao gerar atividade com IA (todos os modelos falharam).");
+        if (responseList == null || responseList.isEmpty() || !responseList.get(0).containsKey("generated_text")) {
+            log.warn("Resposta inválida da Hugging Face: {}", responseList);
+            return "Não foi possível gerar uma atividade no momento.";
+        }
+
+        String rawGeneratedText = responseList.get(0).get("generated_text").toString();
+        if (rawGeneratedText.startsWith(prompt)) {
+            return rawGeneratedText.substring(prompt.length()).trim();
+        }
+        return rawGeneratedText.trim();
     }
 
-    private Atividade gerarComModelo(String modelUrl, String prompt) {
-        WebClient client = buildClient(modelUrl);
+    // ========================= IA — RETORNAR OBJETO COMPLETO ========================= //
+    public Atividade gerarAtividadeComIA(GerarAtividadeRequest request) {
+        log.info("Gerando atividade completa com IA.");
 
-        List<Map<String, Object>> response = client.post()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + huggingFaceApiKey)
-                .bodyValue(Map.of("inputs", prompt))
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
-                .block();
+        String textoGerado = gerarTextoComIA(request);
 
-        if (response == null || response.isEmpty() || !response.get(0).containsKey("generated_text")) {
-            log.warn("Resposta inválida ou vazia recebida do modelo: {}", modelUrl);
-            return null;
+        // Extrair título
+        String titulo = extrairTitulo(textoGerado);
+
+        // Valores padrão
+        List<String> materiais = new ArrayList<>();
+        materiais.add("Materiais comuns em casa");
+        String tipo = "IA";
+
+        Atividade atividade = new Atividade();
+        atividade.setId(UUID.randomUUID().toString()); // gerar ID temporário
+        atividade.setTitulo(titulo);
+        atividade.setDescricao(textoGerado);
+        atividade.setFaixaEtaria(request.getFaixaEtaria());
+        atividade.setMateriais(materiais);
+        atividade.setTipo(tipo);
+
+        log.info("Atividade gerada: {}", atividade.getTitulo());
+        return atividade;
+    }
+
+    private String extrairTitulo(String texto) {
+        if (texto == null || texto.isBlank()) return "Brincadeira Gerada";
+
+        String[] linhas = texto.split("\\r?\\n");
+        String primeira = linhas[0];
+        if (primeira.toLowerCase().contains("título:")) {
+            return primeira.replace("Título:", "").trim();
         }
-
-        try {
-            String content = (String) response.get(0).get("generated_text");
-            log.debug("Texto bruto gerado: {}", content);
-            return mapper.readValue(content, Atividade.class);
-        } catch (Exception e) {
-            log.error("Erro ao processar JSON do modelo {}: {}", modelUrl, e.getMessage());
-            return null;
-        }
+        return primeira.trim();
     }
 }

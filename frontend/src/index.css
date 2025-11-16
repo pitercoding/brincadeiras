@@ -113,8 +113,8 @@ body {
   border-radius: 12px;
   padding: 20px;
   width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  max-width: 450px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
   animation: popIn 0.3s ease;
 }
 
@@ -130,10 +130,12 @@ body {
 }
 
 .modal-content input,
-.modal-content select {
+.modal-content select,
+.modal-content textarea {
   padding: 8px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  font-family: inherit;
 }
 
 .modal-actions {
@@ -159,6 +161,12 @@ body {
   font-weight: bold;
 }
 
+.btn-gerar:disabled,
+.btn-cancelar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @keyframes popIn {
   from {
     transform: scale(0.8);
@@ -170,6 +178,35 @@ body {
   }
 }
 
+/* ======== CARD IA PREVIEW ======== */
+.card-ia {
+  border: 2px dashed #f5a623;
+  background-color: #f4f0ff;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.card-ia:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-ia .card-title {
+  color: #d6336c;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.card-ia .card-desc {
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+.card-ia .card-meta {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.3rem;
+}
 
 /* ========== FILTROS ========== */
 .filtro-container {

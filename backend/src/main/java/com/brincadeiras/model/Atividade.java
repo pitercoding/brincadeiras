@@ -19,7 +19,7 @@ public class Atividade {
     private String titulo;
 
     @NotBlank
-    @Size(min = 10, max = 500)
+    @Size(min = 10, max = 1000)
     private String descricao;
 
     @NotEmpty
@@ -28,54 +28,31 @@ public class Atividade {
     @Pattern(regexp = "\\d-\\d anos", message = "Formato deve ser 'X-Y anos'")
     private String faixaEtaria;
 
-    public Atividade() {
+    @NotBlank
+    private String tipo;
 
-    }
+    public Atividade() {}
 
-    public Atividade(String titulo, String descricao, List<String> materiais, String faixaEtaria) {
+    public Atividade(String titulo, String descricao,
+                     List<String> materiais, String faixaEtaria, String tipo) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.materiais = materiais;
         this.faixaEtaria = faixaEtaria;
+        this.tipo = tipo;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public List<String> getMateriais() {
-        return materiais;
-    }
-
-    public void setMateriais(List<String> materiais) {
-        this.materiais = materiais;
-    }
-
-    public String getFaixaEtaria() {
-        return faixaEtaria;
-    }
-
-    public void setFaixaEtaria(String faixaEtaria) {
-        this.faixaEtaria = faixaEtaria;
-    }
+    // Getters e Setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public List<String> getMateriais() { return materiais; }
+    public void setMateriais(List<String> materiais) { this.materiais = materiais; }
+    public String getFaixaEtaria() { return faixaEtaria; }
+    public void setFaixaEtaria(String faixaEtaria) { this.faixaEtaria = faixaEtaria; }
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 }

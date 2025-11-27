@@ -9,7 +9,6 @@ function Home() {
   const [atividades, setAtividades] = useState([]);
   const [filtradas, setFiltradas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingIA, setLoadingIA] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const location = useLocation();
 
@@ -34,17 +33,16 @@ function Home() {
 
   const filtrarAtividades = ({ busca, faixaEtaria, material }) => {
     const resultado = atividades.filter((a) => {
-      const tituloMatch = a.titulo
-        .toLowerCase()
-        .includes(busca.toLowerCase());
+      const tituloMatch = a.titulo.toLowerCase().includes(busca.toLowerCase());
       const materialMatch = material
-        ? a.materiais.some((m) =>
+        ? a.materiais?.some((m) =>
             m.toLowerCase().includes(material.toLowerCase())
           )
         : true;
 
       const faixaMatch = faixaEtaria
         ? (() => {
+            if (!a.faixaEtaria) return true;
             const [min, max] = faixaEtaria.split("-").map(Number);
             const [faixaMin, faixaMax] = a.faixaEtaria
               .replace(" anos", "")
@@ -68,33 +66,15 @@ function Home() {
     setFiltradas(atividades);
   };
 
-  const gerarAtividadeIA = async (dadosIA) => {
-    setLoadingIA(true);
-    try {
-      const res = await api.post("/atividades/gerar", dadosIA);
-      const novaAtividade = res.data;
-
-      setAtividades((prev) => [novaAtividade, ...prev]);
-      setFiltradas((prev) => [novaAtividade, ...prev]);
-      infoToast("Atividade gerada com sucesso! 🎉");
-    } catch (err) {
-      console.error(err);
-      errorToast("Falha ao gerar atividade com IA 😢");
-    } finally {
-      setLoadingIA(false);
-    }
-  };
-
   if (loading) return <p>Carregando atividades...</p>;
 
   return (
-    <div className="home-container">
+    <div className="home-container content">
       <button
         onClick={() => setShowModal(true)}
         className="btn-gerar-ia"
-        disabled={loadingIA}
       >
-        {loadingIA ? "Gerando..." : "✨ Gerar Ideia com IA"}
+        ✨ Gerar Ideia com IA
       </button>
 
       <FiltroAtividades onFiltrar={filtrarAtividades} onLimpar={limparFiltros} />
@@ -102,7 +82,6 @@ function Home() {
       <ModalGerarIA
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        onConfirm={gerarAtividadeIA}
       />
 
       <div className="grid-container">

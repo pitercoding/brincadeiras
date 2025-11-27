@@ -1,21 +1,25 @@
 package com.brincadeiras.service;
 
+import com.brincadeiras.dto.GerarAtividadeRequest;
 import com.brincadeiras.model.Atividade;
 import com.brincadeiras.repository.AtividadeRepository;
-import com.brincadeiras.dto.GerarAtividadeRequest;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.theokanning.openai.OpenAiService;
+import com.theokanning.openai.completion.chat.*;
 
 @Slf4j
 @Service
@@ -24,28 +28,13 @@ public class AtividadeService {
 
     private final AtividadeRepository atividadeRepository;
 
-    @Value("${huggingface.api.key}")
-    private String huggingFaceApiKey;
+    @Value("${openai.api.key}")
+    private String openAiApiKey;
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    @Value("${openai.model}")
+    private String openAiModel;
 
-    // Lista de modelos gratuitos para tentar
-    private static final String[] MODELOS = {
-            "https://api-inference.huggingface.co/models/gpt2",
-            "https://api-inference.huggingface.co/models/distilgpt2",
-            "https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-125M",
-            "https://api-inference.huggingface.co/models/facebook/opt-125m"
-    };
-
-    private WebClient buildClient(String baseUrl) {
-        return WebClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-    }
-
-    // ========== CRUD ==========
-
+    // ========================= CRUD ========================= //
     public Atividade postAtividade(Atividade atividade) {
         log.info("Salvando nova atividade: {}", atividade.getTitulo());
         try {
@@ -60,18 +49,13 @@ public class AtividadeService {
 
     public List<Atividade> getAllAtividades() {
         log.info("Buscando todas as atividades no banco de dados");
-        List<Atividade> atividades = atividadeRepository.findAll();
-        log.info("Total de atividades encontradas: {}", atividades.size());
-        return atividades;
+        return atividadeRepository.findAll();
     }
 
     public Atividade getAtividadeById(String id) {
         log.info("Buscando atividade com id: {}", id);
         return atividadeRepository.findById(id)
-                .map(atividade -> {
-                    log.info("Atividade encontrada: {}", atividade.getTitulo());
-                    return atividade;
-                })
+                .map(a -> { log.info("Atividade encontrada: {}", a.getTitulo()); return a; })
                 .orElseThrow(() -> {
                     log.warn("Atividade com id {} não encontrada", id);
                     return new NoSuchElementException("Atividade não encontrada");
@@ -82,9 +66,9 @@ public class AtividadeService {
         log.info("Deletando atividade com id: {}", id);
         try {
             atividadeRepository.deleteById(id);
-            log.info("Atividade deletada com sucesso. ID: {}", id);
+            log.info("Atividade deletada com sucesso.");
         } catch (Exception e) {
-            log.error("Erro ao deletar atividade com id {}: {}", id, e.getMessage());
+            log.error("Erro ao deletar atividade: {}", e.getMessage());
             throw e;
         }
     }
@@ -97,71 +81,120 @@ public class AtividadeService {
         existente.setDescricao(novaAtividade.getDescricao());
         existente.setMateriais(novaAtividade.getMateriais());
         existente.setFaixaEtaria(novaAtividade.getFaixaEtaria());
+        existente.setTipo(novaAtividade.getTipo());
 
         try {
-            Atividade atualizada = atividadeRepository.save(existente);
-            log.info("Atividade atualizada com sucesso. ID: {}", id);
-            return atualizada;
+            return atividadeRepository.save(existente);
         } catch (Exception e) {
-            log.error("Erro ao atualizar atividade com id {}: {}", id, e.getMessage());
+            log.error("Erro ao atualizar atividade: {}", e.getMessage());
             throw e;
         }
     }
 
-    // ========== IA — Geração com Hugging Face ==========
+    // ========================= IA — GERAÇÃO DE OBJETO COMPLETO ========================= //
+    public Atividade gerarAtividadeComIA(GerarAtividadeRequest request) {
+        String modelToUse = "gpt-3.5-turbo";
+        if (openAiModel != null && !openAiModel.isBlank() && !openAiModel.equals("gpt-5-nano")) {
+            modelToUse = openAiModel;
+        }
+        log.info("Gerando atividade completa com IA usando modelo: {}", modelToUse);
 
-    public Atividade gerarComIA(GerarAtividadeRequest request) {
-        log.info("Gerando nova atividade com IA. Parâmetros: faixaEtaria={}, tipo={}, materiais={}",
-                request.getFaixaEtaria(), request.getTipo(), request.getMateriais());
+        OpenAiService service = new OpenAiService(openAiApiKey);
 
+        // Prompt aprimorado para garantir um formato de saída estruturado e fácil de parsear
         String prompt = String.format(
-                "Crie uma brincadeira infantil original, divertida e segura para crianças de %s anos. " +
-                        "Tipo de atividade: %s. Materiais disponíveis: %s. " +
-                        "Responda SOMENTE em JSON com este formato: " +
-                        "{\"titulo\":\"...\", \"descricao\":\"...\", \"materiais\":[\"...\"], \"faixaEtaria\":\"...\"}",
+                "Você é um especialista em atividades infantis. Crie uma única brincadeira divertida, simples e segura para crianças de %s anos. %s\n" +
+                        "A resposta DEVE seguir estritamente o formato:\n" +
+                        "TÍTULO: [Título da Atividade]\n" +
+                        "MATERIAIS: [Lista de materiais separados por vírgula]\n" +
+                        "DESCRIÇÃO: [Instruções detalhadas da atividade]",
                 request.getFaixaEtaria(),
-                request.getTipo() != null ? request.getTipo() : "geral",
-                String.join(", ", request.getMateriais())
+                (request.getDescricaoUsuario() != null && !request.getDescricaoUsuario().isBlank())
+                        ? "Restrição: " + request.getDescricaoUsuario().trim() + "."
+                        : "Use materiais comuns encontrados em casa."
         );
 
-        for (String modelUrl : MODELOS) {
-            try {
-                Atividade atividade = gerarComModelo(modelUrl, prompt);
-                if (atividade != null) {
-                    log.info("Atividade gerada com sucesso pelo modelo: {}", modelUrl);
-                    return atividade;
-                }
-                log.warn("Modelo {} falhou, tentando próximo...", modelUrl);
-            } catch (Exception e) {
-                log.error("Erro no modelo {}: {}", modelUrl, e.getMessage());
-            }
+        ChatMessage message = new ChatMessage("user", prompt);
+        ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
+                .model(modelToUse)
+                .messages(List.of(message))
+                .temperature(0.8)
+                .maxTokens(350)
+                .build();
+
+        ChatCompletionResult result = service.createChatCompletion(completionRequest);
+        String textoGerado = result.getChoices().get(0).getMessage().getContent().trim();
+
+        log.info("Texto gerado pela IA:\n{}", textoGerado);
+
+        // Extração aprimorada usando Regex para TÍTULO, MATERIAIS e DESCRIÇÃO
+        Atividade atividade = parseAtividade(textoGerado);
+
+        // Preenchendo campos restantes
+        atividade.setId(UUID.randomUUID().toString());
+        atividade.setFaixaEtaria(request.getFaixaEtaria());
+        atividade.setTipo("IA");
+
+        // Fallback para materiais se a extração falhar
+        if (atividade.getMateriais() == null || atividade.getMateriais().isEmpty()) {
+            atividade.setMateriais(Arrays.asList("Materiais comuns em casa"));
         }
 
-        throw new RuntimeException("Falha ao gerar atividade com IA (todos os modelos falharam).");
+        log.info("Atividade gerada: {}", atividade.getTitulo());
+        return atividade;
     }
 
-    private Atividade gerarComModelo(String modelUrl, String prompt) {
-        WebClient client = buildClient(modelUrl);
+    /**
+     * Extrai Título, Materiais e Descrição do texto gerado pela IA usando Regex.
+     */
+    private Atividade parseAtividade(String texto) {
+        Atividade atividade = new Atividade();
 
-        List<Map<String, Object>> response = client.post()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + huggingFaceApiKey)
-                .bodyValue(Map.of("inputs", prompt))
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
-                .block();
+        // Regex para capturar os três campos baseados no formato estruturado
+        Pattern pattern = Pattern.compile(
+                "TÍTULO:\\s*(.*?)\\s*MATERIAIS:\\s*(.*?)\\s*DESCRIÇÃO:\\s*(.*)",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE
+        );
+        Matcher matcher = pattern.matcher(texto);
 
-        if (response == null || response.isEmpty() || !response.get(0).containsKey("generated_text")) {
-            log.warn("Resposta inválida ou vazia recebida do modelo: {}", modelUrl);
-            return null;
+        if (matcher.find()) {
+            String titulo = matcher.group(1).trim();
+            String materiaisStr = matcher.group(2).trim();
+            String descricao = matcher.group(3).trim();
+
+            atividade.setTitulo(titulo);
+            atividade.setDescricao(descricao);
+
+            // Converte a string de materiais separada por vírgula em uma lista
+            List<String> materiaisList = new ArrayList<>();
+            if (!materiaisStr.isEmpty()) {
+                // Remove pontuações finais e divide por vírgula
+                String cleanedMaterials = materiaisStr.replaceAll("[.;]$", "");
+                materiaisList = Arrays.asList(cleanedMaterials.split("\\s*,\\s*"));
+            }
+            atividade.setMateriais(materiaisList);
+
+        } else {
+            // Fallback: Se o regex falhar, usa o texto inteiro como descrição e a primeira linha como título
+            String[] linhas = texto.split("\\r?\\n");
+            atividade.setTitulo(linhas.length > 0 ? linhas[0].trim() : "Brincadeira Gerada");
+            atividade.setDescricao(texto);
+            atividade.setMateriais(Arrays.asList("Materiais comuns em casa"));
+            log.warn("Falha ao parsear a resposta da IA com Regex. Usando fallback.");
         }
 
-        try {
-            String content = (String) response.get(0).get("generated_text");
-            log.debug("Texto bruto gerado: {}", content);
-            return mapper.readValue(content, Atividade.class);
-        } catch (Exception e) {
-            log.error("Erro ao processar JSON do modelo {}: {}", modelUrl, e.getMessage());
-            return null;
+        return atividade;
+    }
+
+    // O método extrairTitulo mantido por segurança
+    private String extrairTitulo(String texto) {
+        if (texto == null || texto.isBlank()) return "Brincadeira Gerada";
+
+        String[] linhas = texto.split("\\r?\\n");
+        String primeira = linhas[0];
+        if (primeira.toLowerCase().contains("título:")) {
+            return primeira.replace("Título:", "").trim();
         }
+        return primeira.trim();
     }
 }

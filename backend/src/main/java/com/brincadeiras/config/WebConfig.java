@@ -13,8 +13,11 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
+                registry.addMapping("/**") // Aplica a todos os endpoints
+                        .allowedOrigins(
+                                "http://localhost:5173", // Para desenvolvimento local
+                                "https://brincadeiras-one.vercel.app" // Para o frontend em produção
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*");
             }

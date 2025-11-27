@@ -16,7 +16,7 @@ function ModalGerarIA({ isOpen, onClose }) {
     setAtividadeGerada(null);
 
     if (!faixaEtaria) {
-      setError("Selecione uma faixa etária para continuar!");
+      setError("⚠️ Selecione uma faixa etária para continuar!");
       return;
     }
 
@@ -38,7 +38,7 @@ function ModalGerarIA({ isOpen, onClose }) {
         <h2>✨ Gerar ideia com IA</h2>
 
         {error && (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 my-3 rounded">
+          <div className="modal-error-message">
             <p>{error}</p>
           </div>
         )}

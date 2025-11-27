@@ -104,8 +104,11 @@ body {
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center;
   z-index: 1000;
+  align-items: flex-start;
+  padding-top: 80px; 
+  padding-bottom: 40px; 
+  overflow-y: auto;
 }
 
 .modal-content {
@@ -113,9 +116,10 @@ body {
   border-radius: 12px;
   padding: 20px;
   width: 90%;
-  max-width: 450px;
+  max-width: 600px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
   animation: popIn 0.3s ease;
+  margin: auto 0;
 }
 
 .modal-content h2 {
@@ -165,6 +169,17 @@ body {
 .btn-cancelar:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.modal-error-message {
+  background-color: #fee2e2; 
+  border-left: 4px solid #dc2626;
+  color: #b91c1c; 
+  padding: 12px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  font-weight: bold;
 }
 
 @keyframes popIn {
@@ -722,5 +737,10 @@ body {
 
   .card-meta {
     font-size: 0.85rem;
+  }
+
+  .modal-overlay {
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
 }

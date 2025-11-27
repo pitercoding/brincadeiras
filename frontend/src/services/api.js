@@ -1,8 +1,8 @@
 import axios from "axios";
 
-/* URL backend Spring Boot */
+/* URL backend: pega do .env da Vercel */
 const api = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: import.meta.env.VITE_BACKEND_URL,
 });
 
 /* Chama o endpoint no Spring Boot para gerar uma atividade com a IA. */
@@ -16,10 +16,10 @@ export const gerarAtividade = async (dados) => {
       atividade.id = atividade.titulo + Date.now();
     }
 
-    // Garantir materiais e tipo padrão
     if (!atividade.materiais || atividade.materiais.length === 0) {
       atividade.materiais = ["Materiais comuns em casa"];
     }
+
     if (!atividade.tipo) {
       atividade.tipo = "IA";
     }

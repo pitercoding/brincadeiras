@@ -28,14 +28,6 @@ function FiltroAtividades({ onFiltrar, onLimpar }) {
 
   return (
     <div className="filtro-container">
-      <input
-        type="text"
-        placeholder="Filtrar por título..."
-        value={busca}
-        onChange={(e) => setBusca(e.target.value)}
-        onKeyDown={handleKeyPress}
-        className="filtro-input"
-      />
 
       <select
         value={faixaEtaria}
@@ -51,6 +43,15 @@ function FiltroAtividades({ onFiltrar, onLimpar }) {
         <option value="10-14">10-14 anos</option>
       </select>
 
+      <input
+        type="text"
+        placeholder="Filtrar por título..."
+        value={busca}
+        onChange={(e) => setBusca(e.target.value)}
+        onKeyDown={handleKeyPress}
+        className="filtro-input"
+      />
+    
       <input
         type="text"
         placeholder="Filtrar por material..."

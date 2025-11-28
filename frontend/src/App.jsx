@@ -13,20 +13,24 @@ import "react-toastify/dist/ReactToastify.css";
 // Wrapper para usar hook useLocation no topo
 function AppWrapper() {
   const location = useLocation();
-  const fixedFooterPaths = ["/", "/nova"];
-  const isFixedFooter = fixedFooterPaths.includes(location.pathname) || location.pathname.startsWith("/atividades/");
+  // Define as rotas onde o footer deve ser fixo:
+  // 1. "/" (Home) - Já estava fixo
+  // 2. "/nova" (Cadastrar nova atividade) - Novo
+  // 3. "/atividades/:id" (Detalhe/Editar Atividade) - Novo
+  // O footer só será fixo na Home ("/")
+  const isFixedFooter = location.pathname === "/";
 
   return (
     <div className="app-container">
       <header className="header">
-        <h1 className="header-logo">
+        <Link to="/" className="header-logo">
           <img
             src="/gis-de-cera.png"
             alt="Logo Brincadeiras"
             className="logo-img"
           />
           Brincadeiras
-        </h1>
+        </Link>
         <nav>
           <Link to="/">Início</Link>
           <Link to="/nova">Cadastrar</Link>
@@ -58,7 +62,7 @@ function AppWrapper() {
         </div>
       </main>
 
-      {/* passa prop isHome para o Footer */}
+      {/* passa prop isFixedFooter para o Footer */}
       <Footer isFixedFooter={isFixedFooter} />
     </div>
   );

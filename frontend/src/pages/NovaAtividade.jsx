@@ -63,17 +63,14 @@ function NovaAtividade() {
   };
 
   return (
-    <div className="form-container max-w-md mx-auto p-6 bg-white rounded-2xl shadow-md mt-8">
-      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
-        Nova Atividade
-      </h1>
+    <div className="form-container">
+      <h1>Nova Atividade</h1>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit}>
         <input
           placeholder="Título"
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
-          className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <textarea
@@ -81,32 +78,29 @@ function NovaAtividade() {
           value={descricao}
           onChange={(e) => setDescricao(e.target.value)}
           rows={4}
-          className="p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <input
           placeholder="Materiais (separados por vírgula)"
           value={materiais}
           onChange={(e) => setMateriais(e.target.value)}
-          className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        <input
-          placeholder="Faixa etária"
+        {/* SELECT DE FAIXA ETÁRIA */}
+        <select
           value={faixaEtaria}
           onChange={(e) => setFaixaEtaria(e.target.value)}
-          className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-
-        <button
-          type="submit"
-          disabled={loading}
-          className={`p-3 text-white rounded-lg transition-all duration-200 ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600"
-          }`}
         >
+          <option value="">Selecione a faixa etária</option>
+          <option value="0-2 anos">0-2 anos</option>
+          <option value="2-4 anos">2-4 anos</option>
+          <option value="4-6 anos">4-6 anos</option>
+          <option value="6-8 anos">6-8 anos</option>
+          <option value="8-10 anos">8-10 anos</option>
+          <option value="10-14 anos">10-14 anos</option>
+        </select>
+
+        <button type="submit" disabled={loading}>
           {loading ? "Salvando..." : "Criar Atividade"}
         </button>
       </form>

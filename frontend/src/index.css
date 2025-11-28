@@ -36,7 +36,6 @@ body {
 }
 
 .header h1 {
-  /* Removido: Estilo movido para .header-logo */
 }
 
 .header nav a {
@@ -51,9 +50,9 @@ body {
   align-items: center;
   gap: 0.5rem;
   color: #d6336c;
-  text-decoration: none; 
+  text-decoration: none;
   font-size: 1.5rem;
-  font-weight: bold; 
+  font-weight: bold;
 }
 
 .logo-img {
@@ -120,7 +119,7 @@ body {
   justify-content: center;
   z-index: 1000;
   align-items: center;
-  padding-top: 80px; 
+  padding-top: 80px;
   padding-bottom: 60px;
   overflow-y: auto;
 }
@@ -188,9 +187,9 @@ body {
 }
 
 .modal-error-message {
-  background-color: #fee2e2; 
+  background-color: #fee2e2;
   border-left: 4px solid #dc2626;
-  color: #b91c1c; 
+  color: #b91c1c;
   padding: 12px;
   margin-top: 16px;
   margin-bottom: 16px;
@@ -397,6 +396,23 @@ body {
 .form-container textarea {
   resize: vertical;
   min-height: 100px;
+}
+
+/* ========== SELECT DO FORMULARIO ========== */
+.form-container select {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  outline: none;
+  background-color: white;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+
+.form-container select:focus {
+  border-color: #d6336c;
 }
 
 .form-container button {
@@ -720,7 +736,7 @@ body {
 
 @media (max-width: 600px) {
   .footer {
-    padding: 0.5rem 1rem; 
+    padding: 0.5rem 1rem;
   }
   .header {
     padding: 1rem;
@@ -796,4 +812,3 @@ body {
   }
 
 }
-

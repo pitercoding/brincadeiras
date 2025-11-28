@@ -21,6 +21,7 @@ public class AtividadeController {
 
     @PostMapping
     public ResponseEntity<Atividade> postAtividade(@RequestBody @Valid Atividade atividade) {
+        atividade.setTipo("Manual");
         Atividade criada = atividadeService.postAtividade(atividade);
         return ResponseEntity.status(201).body(criada);
     }

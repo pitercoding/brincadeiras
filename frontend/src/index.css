@@ -693,6 +693,12 @@ body {
 
 /* ======== RESPONSIVIDADE ======== */
 @media (max-width: 768px) {
+
+  .background-layer {
+    background-position: center 80px;
+    background-attachment: fixed;
+  }
+
   .grid-container {
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
@@ -713,7 +719,6 @@ body {
 }
 
 @media (max-width: 600px) {
-
   .footer {
     padding: 0.5rem 1rem; 
   }
@@ -767,6 +772,12 @@ body {
 }
 
 @media (max-width: 480px) {
+
+  .background-layer {
+    background-size: contain;
+    background-repeat: repeat-y;
+  }
+
   .grid-container {
     grid-template-columns: 1fr;
   }

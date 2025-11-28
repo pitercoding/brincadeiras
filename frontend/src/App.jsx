@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import "./index.css";
 
 import Home from "./pages/Home";
@@ -10,52 +10,64 @@ import Footer from "./components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Wrapper para usar hook useLocation no topo
+function AppWrapper() {
+  const location = useLocation();
+  const fixedFooterPaths = ["/", "/nova"];
+  const isFixedFooter = fixedFooterPaths.includes(location.pathname) || location.pathname.startsWith("/atividades/");
+
+  return (
+    <div className="app-container">
+      <header className="header">
+        <h1 className="header-logo">
+          <img
+            src="/gis-de-cera.png"
+            alt="Logo Brincadeiras"
+            className="logo-img"
+          />
+          Brincadeiras
+        </h1>
+        <nav>
+          <Link to="/">Início</Link>
+          <Link to="/nova">Cadastrar</Link>
+        </nav>
+      </header>
+
+      {/* ToastContainer global: qualquer componente pode disparar toasts */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
+      <main className="main-content">
+        <div className="background-layer"></div>
+
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/nova" element={<NovaAtividade />} />
+            <Route path="/atividades/:id" element={<DetalheAtividade />} />
+          </Routes>
+        </div>
+      </main>
+
+      {/* passa prop isHome para o Footer */}
+      <Footer isFixedFooter={isFixedFooter} />
+    </div>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
-      <div className="app-container">
-        <header className="header">
-          <h1 className="header-logo">
-            <img
-              src="/gis-de-cera.png"
-              alt="Logo Brincadeiras"
-              className="logo-img"
-            />
-            Brincadeiras
-          </h1>
-          <nav>
-            <Link to="/">Início</Link>
-            <Link to="/nova">Cadastrar</Link>
-          </nav>
-        </header>
-
-        {/* ToastContainer global: qualquer componente pode disparar toasts */}
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-
-        <main className="main-content">
-          <div className="background-layer"></div>
-
-          <div className="content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/nova" element={<NovaAtividade />} />
-              <Route path="/atividades/:id" element={<DetalheAtividade />} />
-            </Routes>
-          </div>
-        </main>
-
-        <Footer />
-      </div>
+      <AppWrapper />
     </BrowserRouter>
   );
 }

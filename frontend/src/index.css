@@ -13,6 +13,13 @@ body {
   background-color: #f7f7f7;
 }
 
+/* ========== LAYOUT PRINCIPAL (NOVO) ========== */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 /* ========== HEADER ========== */
 .header {
   position: fixed;
@@ -54,7 +61,8 @@ body {
 .main-content {
   position: relative;
   padding-top: 80px;
-  min-height: 100vh;
+  padding-bottom: 80px;
+  flex-grow: 1; /* Adicionado para ocupar o espaço restante */
   overflow: hidden;
 }
 
@@ -67,7 +75,9 @@ body {
   height: 100%;
   background-image: url('/brincadeiras-bg.jpg');
   background-size: cover;
-  background-position: center;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-attachment: fixed;
   opacity: 0.3;
   z-index: 0;
 }
@@ -105,9 +115,9 @@ body {
   display: flex;
   justify-content: center;
   z-index: 1000;
-  align-items: flex-start;
+  align-items: center; /* Centraliza verticalmente por padrão */
   padding-top: 80px; 
-  padding-bottom: 40px; 
+  padding-bottom: 60px; /* Reduzido para acompanhar o footer mais fino */
   overflow-y: auto;
 }
 
@@ -119,7 +129,9 @@ body {
   max-width: 600px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
   animation: popIn 0.3s ease;
-  margin: auto 0;
+  margin: 0 auto; /* Remove o margin: auto 0 para centralizar com align-items: center */
+  max-height: calc(100vh - 140px); /* Ajustado para 80px header + 60px footer space */
+  overflow-y: auto; /* Adiciona rolagem ao conteúdo do modal se necessário */
 }
 
 .modal-content h2 {
@@ -495,7 +507,6 @@ body {
   border: none;
   border-radius: 10px;
   font-weight: 600;
-  cursor: pointer;
   transition: all 0.2s ease;
   font-family: "Inter", sans-serif;
   flex: 1 1 30%;
@@ -610,7 +621,7 @@ body {
 .footer {
   background-color: #ffeef4;
   color: #8b1f3a;
-  padding: 1.5rem;
+  padding: 0.75rem 1.5rem; /* Reduzido padding vertical */
   border-top: 2px solid #fbb6ce;
   font-size: 0.95rem;
   margin-top: auto;
@@ -668,6 +679,14 @@ body {
   color: #a92a47;
 }
 
+.footer-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
+
 /* ======== RESPONSIVIDADE ======== */
 @media (max-width: 768px) {
   .grid-container {
@@ -690,6 +709,11 @@ body {
 }
 
 @media (max-width: 600px) {
+  .modal-overlay {
+    align-items: flex-start; /* Força o alinhamento ao topo em telas pequenas */
+    padding-top: 80px;
+    padding-bottom: 70px; /* Reduzido para acompanhar o footer mais fino */
+  }
   .main-content {
     padding: 80px 1rem 2rem 1rem;
   }
@@ -739,8 +763,4 @@ body {
     font-size: 0.85rem;
   }
 
-  .modal-overlay {
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
 }

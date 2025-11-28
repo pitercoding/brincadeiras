@@ -1,8 +1,8 @@
 import { FaLinkedin, FaGithub, FaGlobe } from "react-icons/fa";
 
-function Footer() {
+function Footer({ isFixedFooter }) {
   return (
-    <footer className="footer">
+    <footer className={`footer ${isFixedFooter ? "footer-fixed" : ""}`}>
       <div className="footer-top">
         <div className="footer-project">
           <img src="/gis-de-cera.png" alt="Logo Brincadeiras" className="footer-logo" />

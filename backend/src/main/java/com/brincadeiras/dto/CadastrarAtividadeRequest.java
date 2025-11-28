@@ -25,6 +25,6 @@ public class CadastrarAtividadeRequest {
     private List<String> materiais;
 
     @NotBlank
-    @Pattern(regexp = "\\d-\\d anos", message = "Formato deve ser 'X-Y anos'")
+    @Pattern(regexp = "\\d{1,2}-\\d{1,2} anos", message = "Formato deve ser 'X-Y anos'")
     private String faixaEtaria;
 }

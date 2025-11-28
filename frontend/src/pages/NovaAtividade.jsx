@@ -43,7 +43,7 @@ function NovaAtividade() {
       const res = await api.post("/atividades", {
         titulo: titulo.trim(),
         descricao: descricao.trim(),
-        materiais: materiais.split(",").map((m) => m.trim()),
+        materiais: materiais.split(",").map(m => m.trim()).filter(m => m),
         faixaEtaria: faixaEtaria.trim(),
       });
 
@@ -55,8 +55,8 @@ function NovaAtividade() {
 
       navigate("/", { state: { novaAtividade: res.data } });
     } catch (err) {
-      console.error(err);
-      toast.error("Erro ao criar a atividade. Tente novamente.");
+      console.error(err.response?.data);
+      toast.error(err.response?.data?.message || "Erro ao criar a atividade");
     } finally {
       setLoading(false);
     }

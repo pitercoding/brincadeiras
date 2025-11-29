@@ -280,9 +280,6 @@ Este projeto está sob a licença **MIT** — sinta-se à vontade para usar, est
 
 **Piter Gomes** - **Estudante de Ciências da Computação** (5° Período) e **Full-Stack Developer**.
 
-📧 [**E-mail:**](mailto:piterg.bio@gmail.com)  
-💼 [**LinkedIn:**](https://www.linkedin.com/in/piter-gomes-4a39281a1/)  
-💻 [**GitHub:**](https://github.com/pitercoding)  
-🌐 [**Portfólio:**](https://portfolio-pitergomes.vercel.app/)
+📧 [**E-mail**](mailto:piterg.bio@gmail.com) | 💼 [**LinkedIn**](https://www.linkedin.com/in/piter-gomes-4a39281a1/) | 💻 [**GitHub**](https://github.com/pitercoding) | 🌐 [**Portfólio**](https://portfolio-pitergomes.vercel.app/)
 
 ---

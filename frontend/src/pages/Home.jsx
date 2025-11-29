@@ -70,27 +70,44 @@ function Home() {
 
   return (
     <div className="home-container content">
-      <button
-        onClick={() => setShowModal(true)}
-        className="btn-gerar-ia"
-      >
-        ✨ Gerar Ideia com IA
-      </button>
 
-      <FiltroAtividades onFiltrar={filtrarAtividades} onLimpar={limparFiltros} />
+    
+      <div className="hero-wrapper">
+        
+        <div className="hero-section">
+          <h1 className="hero-title">Brincadeiras Criativas</h1>
+          <p className="hero-subtitle">
+            Encontre atividades simples e divertidas para estimular a criatividade das crianças.
+          </p>
+        </div>
 
-      <ModalGerarIA
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        <button onClick={() => setShowModal(true)} className="btn-gerar-ia">
+          ✨ Gerar Brincadeira com IA
+        </button>
+
+      </div>
+
+
+      <FiltroAtividades
+        onFiltrar={filtrarAtividades}
+        onLimpar={limparFiltros}
       />
+
+      <ModalGerarIA isOpen={showModal} onClose={() => setShowModal(false)} />
 
       <div className="grid-container">
         {filtradas.length > 0 ? (
           filtradas.map((a) => (
-            <Link to={`/atividades/${a.id}`} className="card-atividade" key={a.id}>
+            <Link
+              to={`/atividades/${a.id}`}
+              className="card-atividade"
+              key={a.id}
+            >
               <h2 className="card-title">{a.titulo}</h2>
               <p className="card-desc">{a.descricao}</p>
-              <p className="card-meta">🎨 Materiais: {a.materiais.join(", ")}</p>
+              <p className="card-meta">
+                🎨 Materiais: {a.materiais.join(", ")}
+              </p>
               <p className="card-meta">👶 Faixa etária: {a.faixaEtaria}</p>
             </Link>
           ))

@@ -35,7 +35,7 @@ function ModalGerarIA({ isOpen, onClose }) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>✨ Gerar ideia com IA</h2>
+        <h2>✨ Gerar Brincadeira com IA</h2>
 
         {error && (
           <div className="modal-error-message">

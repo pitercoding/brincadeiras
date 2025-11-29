@@ -6,11 +6,9 @@ import NovaAtividade from "./pages/NovaAtividade";
 import DetalheAtividade from "./pages/DetalheAtividade";
 import Footer from "./components/Footer";
 
-// adicionado: ToastContainer e css do react-toastify
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Wrapper para usar hook useLocation no topo
 function AppWrapper() {
   const location = useLocation();
   const isFixedFooter = location.pathname === "/";
@@ -57,7 +55,6 @@ function AppWrapper() {
         </div>
       </main>
 
-      {/* passa prop isFixedFooter para o Footer */}
       <Footer isFixedFooter={isFixedFooter} />
     </div>
   );

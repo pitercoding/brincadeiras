@@ -13,7 +13,7 @@ body {
   background-color: #f7f7f7;
 }
 
-/* ========== LAYOUT PRINCIPAL (NOVO) ========== */
+/* ========== LAYOUT PRINCIPAL ========== */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -282,6 +282,19 @@ body {
   position: relative;
   z-index: 1;
   padding: 2rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background-color: #d6336c;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 1rem auto;
+  font-weight: bold;
 }
 
 /* ======== CARDS ATIVIDADES ======== */
@@ -732,9 +745,7 @@ body {
 }
 
 @media (max-width: 600px) {
-  .footer {
-    padding: 0.5rem 1rem;
-  }
+
   .header {
     padding: 1rem;
   }
@@ -757,15 +768,33 @@ body {
     padding: 80px 1rem 2rem 1rem;
   }
 
+  .hamburger-btn {
+    display: block;
+  }
+
   .filtro-container {
+    display: none;
     flex-direction: column;
-    align-items: stretch;
+    background: white;
+    border: 1px solid #f3c1d8;
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 0.5rem 0 1rem 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  .filtro-container.mostrar {
+    display: flex;
   }
 
   .filtro-input,
   .filtro-select,
   .filtro-btn {
     width: 100%;
+  }
+
+  .footer {
+    padding: 0.5rem 1rem;
   }
 
   .footer-top {

@@ -8,7 +8,37 @@ O **Brincadeiras** é um aplicativo que permite ao usuário buscar ou receber su
 
 O objetivo é **estimular a criatividade e o brincar livre** com ideias práticas e acessíveis.
 
-[Acesse aqui](https://brincadeiras-one.vercel.app/)
+## 🚀 Como acessar o projeto (importante!)
+
+O backend do projeto está hospedado no **Render**, que pode hibernar após algum tempo sem uso. O frontend está hospedado normalmente na **Vercel**.
+
+Para garantir que tudo funcione corretamente, siga estes passos:
+
+### 1️⃣ Acorde o backend no Render  
+Antes de abrir o site, acesse:
+
+👉 [**Backend - Clique Aqui**](https://brincadeiras-backend.onrender.com/)
+
+Isso fará o Render “acordar” o servidor.  
+- O processo costuma levar **20 a 40 segundos**.  
+- Caso pareça travado, aguarde — é normal na versão gratuita.  
+- Quando a página mostrar algo como *"Backend Ativo!"* ou mensagem semelhante, já estará pronto.
+
+### 2️⃣ Acesse o frontend normalmente  
+Depois que o backend estiver acordado, abra o app:
+
+👉 [**Frontend - Clique Aqui**](https://brincadeiras-one.vercel.app/)
+
+Agora todas as funcionalidades estarão disponíveis:
+- Buscar por atividades  
+- Gerar sugestões aleatórias  
+- Filtrar por faixa etária  
+- Ver detalhes das atividades  
+
+### ℹ️ Por que isso é necessário?
+O Render Free Tier coloca projetos para “hibernar” após um período sem acessos.  
+
+Quando isso acontece, a primeira requisição do dia precisa “acordar” o servidor — o que causa essa espera inicial.
 
 ## 🏆 Motivação
 Durante a infância, o brincar é essencial para o desenvolvimento cognitivo e social. Como aluno de Ciências da Computação, este projeto surgiu da necessidade de criar brincadeiras criativas e educativas para minhas filhas, combinando interesse pessoal com aprendizado profissional.  
@@ -172,6 +202,7 @@ brincadeiras/
 │  │  │  │        ├─ controller/
 │  │  │  │        │  ├─ advice/
 │  │  │  │        │  │  └─ GlobalExceptionHandler.java
+│  │  │  │        │  ├─ RootController.java
 │  │  │  │        │  └─ AtividadeController.java
 │  │  │  │        ├─ dto/
 │  │  │  │        │  ├─ ErrorResponse.java
@@ -193,39 +224,6 @@ brincadeiras/
 │  │        └─ com/
 │  │           └─ brincadeiras/
 │  │              └─ BrincadeirasBackendApplicationTests.java
-│  ├─ target/
-│  │  ├─ classes/
-│  │  │  ├─ com/
-│  │  │  │  └─ brincadeiras/
-│  │  │  │     ├─ config/
-│  │  │  │     │  ├─ RequestLoggingFilter.class
-│  │  │  │     │  ├─ WebConfig.class
-│  │  │  │     │  └─ WebConfig$1.class
-│  │  │  │     ├─ controller/
-│  │  │  │     │  ├─ advice/
-│  │  │  │     │  │  └─ GlobalExceptionHandler.class
-│  │  │  │     │  └─ AtividadeController.class
-│  │  │  │     ├─ dto/
-│  │  │  │     │  ├─ ErrorResponse.class
-│  │  │  │     │  ├─ CadastrarAtividadeRequest.class
-│  │  │  │     │  └─ GerarAtividadeRequest.class
-│  │  │  │     ├─ model/
-│  │  │  │     │  └─ Atividade.class
-│  │  │  │     ├─ repository/
-│  │  │  │     │  └─ AtividadeRepository.class
-│  │  │  │     ├─ service/
-│  │  │  │     │  └─ AtividadeService.class
-│  │  │  │     └─ BrincadeirasBackendApplication.class
-│  │  │  ├─ application-secret.properties
-│  │  │  └─ application.properties
-│  │  ├─ generated-sources/
-│  │  │  └─ annotations/
-│  │  ├─ generated-test-sources/
-│  │  │  └─ test-annotations/
-│  │  └─ test-classes/
-│  │     └─ com/
-│  │        └─ brincadeiras/
-│  │           └─ BrincadeirasBackendApplicationTests.class
 │  ├─ .gitattributes
 │  ├─ .gitignore
 │  ├─ Dockerfile
@@ -278,13 +276,13 @@ brincadeiras/
 
 Este projeto está sob a licença **MIT** — sinta-se à vontade para usar, estudar e modificar.
 
-## 👤 Autor
+## 🧑‍💻 Autor
 
-**Piter Gomes**
+**Piter Gomes** - **Estudante de Ciências da Computação** (5° Período) e **Full-Stack Developer**.
 
-📧 **E-mail:** [piterg.bio@gmail.com](mailto:piterg.bio@gmail.com)  
-💼 **LinkedIn:** [linkedin.com/in/piter-gomes-4a39281a1](https://www.linkedin.com/in/piter-gomes-4a39281a1/)  
-💻 **GitHub:** [github.com/pitercoding](https://github.com/pitercoding)  
-🌐 **Portfólio:** [portfolio-pitergomes.vercel.app](https://portfolio-pitergomes.vercel.app/)
+📧 [**E-mail:**](mailto:piterg.bio@gmail.com)  
+💼 [**LinkedIn:**](https://www.linkedin.com/in/piter-gomes-4a39281a1/)  
+💻 [**GitHub:**](https://github.com/pitercoding)  
+🌐 [**Portfólio:**](https://portfolio-pitergomes.vercel.app/)
 
 ---

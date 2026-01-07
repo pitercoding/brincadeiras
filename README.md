@@ -3,7 +3,12 @@
   Brincadeiras
 </h1>
 
-## 🧠 Descrição
+<p align="center">
+  🌎 <strong>Languages:</strong><br>
+  <a href="README.md">🇧🇷 Português</a> |
+  <a href="README.en.md">🇺🇸 English</a>
+</p>
+
 O **Brincadeiras** é um aplicativo que permite ao usuário buscar ou receber sugestões de atividades criativas para crianças, utilizando materiais simples como papel, palito, barbante, etc.  
 
 O objetivo é **estimular a criatividade e o brincar livre** com ideias práticas e acessíveis.
@@ -36,9 +41,7 @@ Agora todas as funcionalidades estarão disponíveis:
 - Ver detalhes das atividades  
 
 ### ℹ️ Por que isso é necessário?
-O Render Free Tier coloca projetos para “hibernar” após um período sem acessos.  
-
-Quando isso acontece, a primeira requisição do dia precisa “acordar” o servidor — o que causa essa espera inicial.
+O Render Free Tier coloca projetos para “hibernar” após um período sem acessos. Quando isso acontece, a primeira requisição do dia precisa “acordar” o servidor — o que causa essa espera inicial.
 
 ## 🏆 Motivação
 Durante a infância, o brincar é essencial para o desenvolvimento cognitivo e social. Como aluno de Ciências da Computação, este projeto surgiu da necessidade de criar brincadeiras criativas e educativas para minhas filhas, combinando interesse pessoal com aprendizado profissional.  

@@ -19,36 +19,39 @@ The backend of the project is hosted on **Render**, which may hibernate after so
 
 To ensure everything works correctly, follow these steps:
 
-### 1️⃣ Wake up the backend on Render  
-Before opening the site, access:
+### 1️⃣ Wake up the backend on Render
 
-👉 [**Backend - Click Here**](https://brincadeiras-backend.onrender.com/)
+Before opening the site, access: 👉 [**Backend - Click Here**](https://brincadeiras-backend.onrender.com/)
 
-This will make Render “wake up” the server.  
-- The process usually takes **20 to 40 seconds**.  
+This will make Render “wake up” the server.
+
+- The process usually takes **20 to 40 seconds**.
 - If it seems stuck, wait — this is normal on the free tier.  
 - When the page shows something like *"Backend Active!"* or a similar message, it’s ready.
 
-### 2️⃣ Access the frontend normally  
-After the backend is awake, open the app:
+### 2️⃣ Access the frontend normally
 
-👉 [**Frontend - Click Here**](https://brincadeiras-one.vercel.app/)
+After the backend is awake, open the app: 👉 [**Frontend - Click Here**](https://brincadeiras-one.vercel.app/)
 
 Now all features will be available:
+
 - Search for activities  
 - Generate random suggestions  
 - Filter by age range  
 - View activity details  
 
 ### ℹ️ Why is this necessary?
+
 Render Free Tier puts projects into “hibernation” after a period without access. When this happens, the first request of the day needs to “wake up” the server — causing this initial delay.
 
 ## 🏆 Motivation
-During childhood, play is essential for cognitive and social development. As a Computer Science student, this project emerged from the need to create creative and educational activities for my daughters, combining personal interest with professional learning.
+
+During childhood, play is essential for cognitive and social development. As a Computer Science student, this project emerged from the need to create creative and educational activities for children, combining personal interest with professional learning.
 
 In addition to providing practical and accessible activities for children, the project allowed me to develop skills in **full-stack development**, **database integration**, **REST API handling**, **artificial intelligence implementation**, and deployment of complete web applications.
 
 ## 📚 Learning
+
 During the development of the project, skills were applied and improved in:
 
 - **Frontend:** React, Vite, responsive CSS, React Router, Axios, React-Toastify.
@@ -60,6 +63,7 @@ During the development of the project, skills were applied and improved in:
 ---
 
 ## 🧱 General Structure
+
 | Layer        | Technology        | Main Function |
 |--------------|-------------------|---------------|
 | Frontend     | React + Vite      | Interface to view, filter, add, edit, and generate activities with AI |
@@ -72,6 +76,7 @@ During the development of the project, skills were applied and improved in:
 ## ⚙️ Technologies and Tools
 
 ### 🎨 Frontend (React + Vite)
+
 - ✅ React 18+  
 - ✅ Axios  
 - ✅ React Router  
@@ -81,19 +86,19 @@ During the development of the project, skills were applied and improved in:
 - ✅ ModalGerarIA.jsx  
 
 **Current features:**
+
 - Activity cards from the backend  
 - Filters by title, age range, and materials  
 - Proper communication via Axios  
 - Home, ActivityDetail, and NewActivity pages  
 - Responsive Navbar and Footer  
 - AI generation modal with internal scroll and button disabling during generation  
-
-**Card view example:**
-
-<img width="1173" height="591" alt="image" src="https://github.com/user-attachments/assets/3cdacf5d-4d48-468d-86db-006c72270af1" />
+- Refreshed visual style with playful typography, unified colors, and full responsiveness
 
 ---
+
 ### ⚙️ Backend (Spring Boot + MongoDB)
+
 - ✅ Spring Boot 3+  
 - ✅ Spring Web (REST APIs)  
 - ✅ Spring Data MongoDB  
@@ -109,6 +114,7 @@ During the development of the project, skills were applied and improved in:
 - ✅ Dependencies added for OpenAI integration  
 
 **Implemented endpoints:**
+
 | Method | Route | Function | Status |
 |--------|-------|----------|--------|
 | GET    | /atividades | List all activities | ✅ |
@@ -119,7 +125,9 @@ During the development of the project, skills were applied and improved in:
 | POST   | /atividades/gerar | Automatically generate an activity via AI | ✅ |
 
 ---
+
 ### 🗄️ Database (MongoDB Atlas)
+
 - ✅ Cluster created and connected to Spring Boot  
 - ✅ Tests completed via Compass and Postman  
 - ✅ Document structure:
@@ -141,12 +149,22 @@ During the development of the project, skills were applied and improved in:
 - ✅ Activities return title, description, materials, age group, id, and type
 - ✅ Styled and functional “✨ Generate idea with AI” button that disables buttons during generation
 
-AI generation example:
+## 📸 Screenshots
 
-<img width="420" height="475" alt="image" src="https://github.com/user-attachments/assets/74c9b038-ea0d-4447-8194-e61a0d8fb43b" />
+Cards:
+![Cards](docs/images/cards.png)
 
+Detail (update/delete):
+![Update/Delete](docs/images/update-delete-card.png)
+
+AI Modal:
+![Modal IA](docs/images/modal-ia.png)
+
+New Activity:
+![New Activity](docs/images/new-card.png)
 
 ## 🧭 Application Flow
+
 ```scss
 User → Frontend (React)
 ↓
@@ -168,111 +186,44 @@ MongoDB (Atlas)
 | AI            | ✅ Implemented| Endpoint and frontend integrated with OpenAI |
 | Deploy        | ✅ Completed  | Backend → Render, Frontend → Vercel |
 
+## 🗂️ Folder Structure (essential)
 
-## 📂 Folder Structure
 ```bash
 brincadeiras/
-├─ .idea/
-│  ├─ .gitignore
-│  ├─ brincadeiras.iml
-│  ├─ misc.xml
-│  ├─ modules.xml
-│  ├─ vcs.xml
-│  └─ workspace.xml
-├─ .vscode/
-│  └─ settings.json
-├─ backend/
-│  ├─ .idea/
-│  │  ├─ .gitignore
-│  │  ├─ compiler.xml
-│  │  ├─ encodings.xml
-│  │  ├─ jarRepositories.xml
-│  │  ├─ misc.xml
-│  │  ├─ vcs.xml
-│  │  └─ workspace.xml
-│  ├─ .mvn/
-│  │  └─ wrapper/
-│  │     └─ maven-wrapper.properties
-│  ├─ src/
-│  │  ├─ main/
-│  │  │  ├─ java/
-│  │  │  │  └─ com/
-│  │  │  │     └─ brincadeiras/
-│  │  │  │        ├─ config/
-│  │  │  │        │  ├─ RequestLoggingFilter.java
-│  │  │  │        │  ├─ SecurityConfig.java
-│  │  │  │        │  └─ WebConfig.java
-│  │  │  │        ├─ controller/
-│  │  │  │        │  ├─ advice/
-│  │  │  │        │  │  └─ GlobalExceptionHandler.java
-│  │  │  │        │  ├─ RootController.java
-│  │  │  │        │  └─ AtividadeController.java
-│  │  │  │        ├─ dto/
-│  │  │  │        │  ├─ ErrorResponse.java
-│  │  │  │        │  └─ GerarAtividadeRequest.java
-│  │  │  │        ├─ model/
-│  │  │  │        │  └─ Atividade.java
-│  │  │  │        ├─ repository/
-│  │  │  │        │  └─ AtividadeRepository.java
-│  │  │  │        ├─ service/
-│  │  │  │        │  └─ AtividadeService.java
-│  │  │  │        └─ BrincadeirasBackendApplication.java
-│  │  │  └─ resources/
-│  │  │     ├─ static/
-│  │  │     ├─ templates/
-│  │  │     ├─ application-secret.properties
-│  │  │     └─ application.properties
-│  │  └─ test/
-│  │     └─ java/
-│  │        └─ com/
-│  │           └─ brincadeiras/
-│  │              └─ BrincadeirasBackendApplicationTests.java
-│  ├─ .gitattributes
-│  ├─ .gitignore
-│  ├─ Dockerfile
-│  ├─ HELP.md
-│  ├─ mvnw
-│  ├─ mvnw.cmd
-│  └─ pom.xml
-├─ frontend/
-│  ├─ .vite/
-│  │  └─ deps/
-│  │     ├─ _metadata.json
-│  │     └─ package.json
-│  ├─ public/
-│  │  ├─ brincadeiras-bg.jpg
-│  │  ├─ favicon.ico
-│  │  └─ gis-de-cera.png
-│  ├─ src/
-│  │  ├─ assets/
-│  │  ├─ components/
-│  │  │  ├─ CardAtividade.jsx
-│  │  │  ├─ FiltroAtividades.jsx
-│  │  │  ├─ Footer.jsx
-│  │  │  └─ ModalGerarIA.jsx
-│  │  ├─ pages/
-│  │  │  ├─ DetalheAtividade.jsx
-│  │  │  ├─ Home.jsx
-│  │  │  └─ NovaAtividade.jsx
-│  │  ├─ services/
-│  │  │  └─ api.js
-│  │  ├─ utils/
-│  │  │  └─ toast.js
-│  │  ├─ App.jsx
-│  │  ├─ index.css
-│  │  └─ main.jsx
-│  ├─ .env
-│  ├─ .env.example
-│  ├─ .gitignore
-│  ├─ eslint.config.js
-│  ├─ index.html
-│  ├─ package-lock.json
-│  ├─ package.json
-│  └─ vite.config.js
-├─ .gitattributes
-├─ .gitignore
-├─ LICENSE
-└─ README.md
+├── 📂 backend/
+│   ├── 📂 src/
+│   │   ├── 📂 main/
+│   │   │   ├── 📂 java/com/brincadeiras/
+│   │   │   │   ├── 📂 config/           # Security, CORS, and Logging settings
+│   │   │   │   ├── 📂 controller/       # API Endpoints
+│   │   │   │   ├── 📂 dto/              # Data Transfer Objects
+│   │   │   │   ├── 📂 model/            # Entities (Activity/Atividade)
+│   │   │   │   ├── 📂 repository/       # Database access interfaces
+│   │   │   │   ├── 📂 service/          # Business logic
+│   │   │   │   └── BrincadeirasBackendApplication.java
+│   │   │   └── 📂 resources/
+│   │   │       ├── application.properties
+│   │   │       └── application-secret.properties
+│   │   └── 📂 test/                     # Unit and integration tests
+│   ├── Dockerfile                       # Container configuration
+│   └── pom.xml                          # Maven dependencies
+├── 📂 docs/
+│   └── 📂 images/                       # Documentation screenshots
+├── 📂 frontend/
+│   ├── 📂 public/                       # Static assets (icons, images)
+│   ├── 📂 src/
+│   │   ├── 📂 components/               # Reusable React components
+│   │   ├── 📂 pages/                    # Main views (Home, New Activity)
+│   │   ├── 📂 services/                 # Axios/Fetch API configuration
+│   │   ├── App.jsx                      # Main routing and structure
+│   │   ├── index.css                    # Global styles
+│   │   └── main.jsx                     # React entry point
+│   ├── .env.example                     # Environment variables template
+│   ├── package.json                     # Scripts and JS dependencies
+│   └── vite.config.js                   # Vite configuration
+├── LICENSE
+├── README.md                            # Main documentation
+└── .gitignore                           # Files excluded from version control
 ```
 
 ## 📜 **License**

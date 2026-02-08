@@ -14,7 +14,7 @@ function Footer() {
         </div>
 
         <div className="footer-author">
-          Criado por <strong>Piter Gomes</strong> — © 2025
+          Criado por <strong>Piter Gomes</strong> â€” Â© 2025
         </div>
 
         <div className="footer-links">

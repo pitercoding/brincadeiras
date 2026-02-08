@@ -29,7 +29,7 @@ function AppWrapper() {
               `nav-link ${isActive ? "active" : ""}`
             }
           >
-            InÍcio
+            Início
           </NavLink>
           <NavLink
             to="/nova"

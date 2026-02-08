@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import "./index.css";
 
 import Home from "./pages/Home";
@@ -10,23 +10,35 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function AppWrapper() {
-  const location = useLocation();
-  const isFixedFooter = location.pathname === "/";
-
   return (
     <div className="app-container">
       <header className="header">
-        <Link to="/" className="header-logo">
+        <NavLink to="/" className="header-logo">
           <img
             src="/gis-de-cera.png"
             alt="Logo Brincadeiras"
             className="logo-img"
           />
           Brincadeiras
-        </Link>
-        <nav>
-          <Link to="/">Início</Link>
-          <Link to="/nova">Cadastrar</Link>
+        </NavLink>
+        <nav className="header-nav">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active" : ""}`
+            }
+          >
+            InÍcio
+          </NavLink>
+          <NavLink
+            to="/nova"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active" : ""}`
+            }
+          >
+            Cadastrar
+          </NavLink>
         </nav>
       </header>
 
@@ -55,7 +67,7 @@ function AppWrapper() {
         </div>
       </main>
 
-      <Footer isFixedFooter={isFixedFooter} />
+      <Footer />
     </div>
   );
 }
